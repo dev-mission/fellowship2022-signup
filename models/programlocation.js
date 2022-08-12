@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   ProgramLocation.init(
     {
       LocationId: DataTypes.INTEGER,
-      VisitorsId: DataTypes.INTEGER,
+      ProgramId: DataTypes.INTEGER,
     },
     {
       sequelize,

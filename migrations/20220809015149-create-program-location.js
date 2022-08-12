@@ -11,7 +11,7 @@ module.exports = {
       LocationId: {
         type: Sequelize.INTEGER,
       },
-      VisitorsId: {
+      ProgramId: {
         type: Sequelize.INTEGER,
       },
       createdAt: {

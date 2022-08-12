@@ -9,24 +9,20 @@ const models = require('../../models');
 
 describe('models.ProgramLocation', () => {
   beforeEach(async () => {
-    await helper.loadFixtures(['programlocation']);
+    await helper.loadFixtures(['programlocations']);
   });
 
   it('create a new ProgramLocation record', async () => {
     let ProgramLocation = models.ProgramLocation.build({
-      Name: 'San Jose',
-      Created: '2019',
-      Pictures: 'xxx',
-      Audio: 'xxx',
+      LocationId: '360 Valencia',
+      ProgramId: 'Pre-Apprenticeship',
     });
     assert.deepStrictEqual(ProgramLocation.id, null);
     await ProgramLocation.save(); //save to data base, id will generate after it save
     assert(ProgramLocation.id);
 
-    assert.deepStrictEqual(ProgramLocation.Name, 'San Jose');
-    assert.deepStrictEqual(ProgramLocation.Created, '2019');
-    assert.deepStrictEqual(ProgramLocation.Pictures, 'xxx');
-    assert.deepStrictEqual(ProgramLocation.Audio, 'xxx');
+    assert.deepStrictEqual(ProgramLocation.LocationId, '360 Valencia');
+    assert.deepStrictEqual(ProgramLocation.ProgramId, 'Pre-Apprenticeship');
   });
   it('fetches all the time', async () => {
     const results = await models.ProgramLocation.findAll();
