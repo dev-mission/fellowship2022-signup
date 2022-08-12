@@ -4,6 +4,8 @@ Team Members:
 Drew Hollenberg
 Weipeng(William) Wang
 Kimon Monokandilos
+Fatimah Inayah Abdolcader
+
 This repository contains a "starter" project for web application development in JavaScript. This includes the following components, from front-end to back-end:
 
 - React 18.1.0
