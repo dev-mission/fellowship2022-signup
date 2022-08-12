@@ -11,12 +11,6 @@ module.exports = {
       Name: {
         type: Sequelize.STRING,
       },
-      Visitors: {
-        type: Sequelize.INTEGER,
-      },
-      LocationUserId: {
-        type: Sequelize.INTEGER,
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
