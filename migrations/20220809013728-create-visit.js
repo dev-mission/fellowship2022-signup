@@ -20,14 +20,17 @@ module.exports = {
       Temperature: {
         type: Sequelize.STRING,
       },
-      ProgramLocationId: {
+      ProgramId: {
+        type: Sequelize.INTEGER,
+      },
+      LocationId: {
         type: Sequelize.INTEGER,
       },
       TimeIn: {
-        type: Sequelize.STRING,
+        type: Sequelize.DATE,
       },
       TimeOut: {
-        type: Sequelize.STRING,
+        type: Sequelize.DATE,
       },
       createdAt: {
         allowNull: false,
