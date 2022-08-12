@@ -13,8 +13,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   ProgramLocation.init(
     {
-      LocationId: DataTypes.INTEGER,
-      ProgramId: DataTypes.INTEGER,
+      LocationId: DataTypes.STRING,
+      ProgramId: DataTypes.STRING,
     },
     {
       sequelize,

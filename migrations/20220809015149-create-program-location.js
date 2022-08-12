@@ -9,10 +9,10 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       LocationId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
       ProgramId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,

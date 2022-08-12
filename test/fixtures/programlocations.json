@@ -1,18 +1,18 @@
 [
   {
-    "model": "User",
+    "model": "ProgramLocation",
     "data": {
       "id": 1,
-      "locationid": "360 Valencia",
-      "programid": "Pre-Apprenticeship"
+      "LocationId": "360 Valencia",
+      "ProgramId": "Pre-Apprenticeship"
     }
   },
   {
-    "model": "User",
+    "model": "ProgramLocation",
     "data": {
       "id": 2,
-      "locationid": "360 Valencia",
-      "programid": "Pre-Apprenticeship"
+      "LocationId": "360 Valencia",
+      "ProgramId": "Pre-Apprenticeship"
     }
   }
 ]
