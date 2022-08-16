@@ -12,26 +12,33 @@ describe('models.visit', () => {
     await helper.loadFixtures(['visits']);
   });
 
-  it('create a new program record', async () => {
+  it('create a new visit record', async () => {
     let Visit = models.Visit.build({
-      FirstName: '',
-      LastName: '',
-      PhoneNumber: '',
-      Temperature: '',
-      ProgramId: '',
-      LocationId: '',
-      TimeIn: '',
-      TimeOut: ''
+      FirstName: 'Kimon',
+      LastName: 'Monokandilos',
+      PhoneNumber: '4155276516',
+      Temperature: '97',
+      ProgramId: 1,
+      LocationId: 1,
+      TimeIn: '2022-08-15T02:07:23+0000',
+      TimeOut: '2022-08-15T02:07:24+0000',
     });
     assert.deepStrictEqual(Visit.id, null);
     await Visit.save(); //save to data base, id will generate after it save
     assert(Visit.id);
 
-    assert.deepStrictEqual(Visit.Name, '');
+    assert.deepStrictEqual(Visit.FirstName, 'Kimon');
+    assert.deepStrictEqual(Visit.LastName, 'Monokandilos');
+    assert.deepStrictEqual(Visit.PhoneNumber, '4155276516');
+    assert.deepStrictEqual(Visit.Temperature, '97');
+    assert.deepStrictEqual(Visit.ProgramId, 1);
+    assert.deepStrictEqual(Visit.LocationId, 1);
+    assert.deepStrictEqual(Visit.TimeIn, new Date('2022-08-15T02:07:23+0000'));
+    assert.deepStrictEqual(Visit.TimeOut, new Date('2022-08-15T02:07:24+0000'));
   });
   it('fetches all the time', async () => {
     const results = await models.Visit.findAll();
-    assert.deepStrictEqual(results.length, 2);
+    assert.deepStrictEqual(results.length, 1);
     console.log(results);
   });
 });

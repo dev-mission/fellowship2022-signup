@@ -3,14 +3,14 @@
         "model": "Visit",
         "data": {
             "id": 1,
-            "FirstName": "",
-            "LastName": "",
-            "PhoneNumber": "",
-            "Temperature": "",
-            "ProgramId": "",
-            "LocationId": "",
-            "TimeIn": "",
-            "TimeOut": ""
+            "FirstName": "Kimon",
+            "LastName": "Monokandilos",
+            "PhoneNumber": "4155276516",
+            "Temperature": "97",
+            "ProgramId": 1,
+            "LocationId": 1,
+            "TimeIn": "2022-08-15T02:07:23+0000",
+            "TimeOut": "2022-08-15T02:07:24+0000"
         }
     }
 ]
