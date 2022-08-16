@@ -23,6 +23,7 @@ const resetDatabase = async () => {
   await models.sequelize.query(`
     DELETE FROM "Users";
     DELETE FROM "Programs";
+    DELETE FROM "Locations";
   `);
 };
 

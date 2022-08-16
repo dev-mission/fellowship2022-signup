@@ -14,9 +14,6 @@ module.exports = {
       Address: {
         type: Sequelize.STRING,
       },
-      LocationUserId: {
-        type: Sequelize.INTEGER,
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -26,6 +23,7 @@ module.exports = {
         type: Sequelize.DATE,
       },
     });
+    await queryInterface.sequelize.query('ALTER SEQUENCE "Locations_id_seq" RESTART WITH 100;');
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Locations');

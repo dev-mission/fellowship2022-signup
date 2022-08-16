@@ -1,0 +1,18 @@
+[
+  {
+    "model": "Location",
+    "data": {
+      "id": 1,
+      "Name": "Jose",
+      "Address": "360 Valencia"
+    }
+  },
+  {
+    "model": "Location",
+    "data": {
+      "id": 2,
+      "Name": "Kimon",
+      "Address": "360 Valencia"
+    }
+  }
+]
