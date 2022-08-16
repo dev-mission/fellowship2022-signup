@@ -7,23 +7,30 @@ const { v4: uuid } = require('uuid');
 const helper = require('../helper');
 const models = require('../../models');
 
-describe('models.program', () => {
+describe('models.visit', () => {
   beforeEach(async () => {
-    await helper.loadFixtures(['program']);
+    await helper.loadFixtures(['visits']);
   });
 
   it('create a new program record', async () => {
-    let Program = models.Program.build({
-      Name: 'Ben',
+    let Visit = models.Visit.build({
+      FirstName: '',
+      LastName: '',
+      PhoneNumber: '',
+      Temperature: '',
+      ProgramId: '',
+      LocationId: '',
+      TimeIn: '',
+      TimeOut: ''
     });
-    assert.deepStrictEqual(Program.id, null);
-    await Program.save(); //save to data base, id will generate after it save
-    assert(Program.id);
+    assert.deepStrictEqual(Visit.id, null);
+    await Visit.save(); //save to data base, id will generate after it save
+    assert(Visit.id);
 
-    assert.deepStrictEqual(Program.Name, 'Ben');
+    assert.deepStrictEqual(Visit.Name, '');
   });
   it('fetches all the time', async () => {
-    const results = await models.Program.findAll();
+    const results = await models.Visit.findAll();
     assert.deepStrictEqual(results.length, 2);
     console.log(results);
   });

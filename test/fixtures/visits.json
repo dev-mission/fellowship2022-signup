@@ -1,16 +1,16 @@
 [
     {
-        "model": "Program",
+        "model": "Visit",
         "data": {
             "id": 1,
-            "Name": "Jose"
-        }
-    },
-    {
-        "model": "Program",
-        "data": {
-            "id": 2,
-            "Name": "Kimon"
+            "FirstName": "",
+            "LastName": "",
+            "PhoneNumber": "",
+            "Temperature": "",
+            "ProgramId": "",
+            "LocationId": "",
+            "TimeIn": "",
+            "TimeOut": ""
         }
     }
 ]
