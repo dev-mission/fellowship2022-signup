@@ -8,10 +8,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      LocationUserId: {
+      LocationId: {
         type: Sequelize.INTEGER,
       },
-      VisitorsUserId: {
+      ProgramId: {
         type: Sequelize.INTEGER,
       },
       createdAt: {

@@ -24,6 +24,7 @@ const resetDatabase = async () => {
     DELETE FROM "Users";
     DELETE FROM "Programs";
     DELETE FROM "Locations";
+    DELETE FROM "ProgramLocations"
   `);
 };
 
