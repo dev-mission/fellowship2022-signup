@@ -41,6 +41,7 @@ module.exports = {
         type: Sequelize.DATE,
       },
     });
+    await queryInterface.sequelize.query('ALTER SEQUENCE "Visits_id_seq" RESTART WITH 100;');
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Visits');
