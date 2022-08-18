@@ -17,9 +17,10 @@ module.exports = (sequelize, DataTypes) => {
       LastName: DataTypes.STRING,
       PhoneNumber: DataTypes.STRING,
       Temperature: DataTypes.STRING,
-      ProgramLocationId: DataTypes.INTEGER,
-      TimeIn: DataTypes.STRING,
-      TimeOut: DataTypes.STRING,
+      ProgramId: DataTypes.INTEGER,
+      LocationId: DataTypes.INTEGER,
+      TimeIn: DataTypes.DATE,
+      TimeOut: DataTypes.DATE,
     },
     {
       sequelize,
