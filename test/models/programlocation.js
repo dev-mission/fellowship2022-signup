@@ -22,11 +22,12 @@ describe('models.programlocation', () => {
     assert(ProgramLocation.id);
 
     assert.deepStrictEqual(ProgramLocation.LocationId, 1);
-    assert.deepStrictEqual(ProgramLocation.ProgramId, 1);
+    assert.deepStrictEqual(ProgramLocation.ProgramId, 2);
   });
   it('fetches all the time', async () => {
     const results = await models.ProgramLocation.findAll();
     assert.deepStrictEqual(results.length, 1);
+    console.log(results);
     console.log(results);
   });
 });
