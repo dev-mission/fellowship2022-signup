@@ -19,7 +19,7 @@ describe('/api/visit', () => {
     it('returns a list of visits', async () => {
       const response = await testSession.get('/api/visit').expect(HttpStatus.OK);
       const visit = response.body;
-      assert.deepStrictEqual(visit.length, 2);
+      assert.deepStrictEqual(visit.length, 1);
     });
   });
 
@@ -33,8 +33,8 @@ describe('/api/visit', () => {
       assert.deepStrictEqual(visit.Temperature, '97');
       assert.deepStrictEqual(visit.ProgramId, 1);
       assert.deepStrictEqual(visit.LocationId, 1);
-      assert.deepStrictEqual(visit.TimeIn, new Date('2022-08-15T02:07:23+0000'));
-      assert.deepStrictEqual(visit.TimeOut, new Date('2022-08-15T02:07:24+0000'));
+      assert.deepStrictEqual(visit.TimeIn, '2022-08-15T02:07:23.000Z');
+      assert.deepStrictEqual(visit.TimeOut, '2022-08-15T02:07:24.000Z');
     });
 
     it('returns NOT FOUND for an id not in the database', async () => {
@@ -63,8 +63,8 @@ describe('/api/visit', () => {
             Temperature: '97',
             ProgramId: 1,
             LocationId: 1,
-            TimeIn: new Date('2022-08-15T02:07:23+0000'),
-            TimeOut: new Date('2022-08-15T02:07:24+0000'),
+            TimeIn: '2022-08-15T02:07:23+0000',
+            TimeOut: '2022-08-15T02:07:24+0000',
           })
           .expect(HttpStatus.CREATED);
 
@@ -76,10 +76,10 @@ describe('/api/visit', () => {
         assert.deepStrictEqual(Temperature, '97');
         assert.deepStrictEqual(ProgramId, 1);
         assert.deepStrictEqual(LocationId, 1);
-        assert.deepStrictEqual(TimeIn, new Date('2022-08-15T02:07:23+0000'));
-        assert.deepStrictEqual(TimeOut, new Date('2022-08-15T02:07:24+0000'));
+        assert.deepStrictEqual(TimeIn, '2022-08-15T02:07:23.000Z');
+        assert.deepStrictEqual(TimeOut, '2022-08-15T02:07:24.000Z');
 
-        const visit = await models.visit.findByPk(id); //checking if it is found on data base
+        const visit = await models.Visit.findByPk(id); //checking if it is found on data base
         assert(visit);
         assert.deepStrictEqual(visit.FirstName, 'Kimon');
         assert.deepStrictEqual(visit.LastName, 'Monokandilos');
@@ -104,12 +104,12 @@ describe('/api/visit', () => {
             Temperature: '97',
             ProgramId: 1,
             LocationId: 1,
-            TimeIn: new Date('2022-08-15T02:07:23+0000'),
-            TimeOut: new Date('2022-08-15T02:07:24+0000'),
+            TimeIn: '2022-08-15T02:07:23+0000',
+            TimeOut: '2022-08-15T02:07:24+0000',
           })
           .expect(HttpStatus.OK);
 
-        const { id, Name } = response.body;
+        const { id, FirstName, LastName, PhoneNumber, Temperature, ProgramId, LocationId, TimeIn, TimeOut } = response.body;
         assert.deepStrictEqual(id, 1);
         assert.deepStrictEqual(FirstName, 'Kimon');
         assert.deepStrictEqual(LastName, 'Monokandilos');
@@ -117,8 +117,8 @@ describe('/api/visit', () => {
         assert.deepStrictEqual(Temperature, '97');
         assert.deepStrictEqual(ProgramId, 1);
         assert.deepStrictEqual(LocationId, 1);
-        assert.deepStrictEqual(TimeIn, new Date('2022-08-15T02:07:23+0000'));
-        assert.deepStrictEqual(TimeOut, new Date('2022-08-15T02:07:24+0000'));
+        assert.deepStrictEqual(TimeIn, '2022-08-15T02:07:23.000Z');
+        assert.deepStrictEqual(TimeOut, '2022-08-15T02:07:24.000Z');
 
         const visit = await models.Visit.findByPk(id);
         assert(visit);
