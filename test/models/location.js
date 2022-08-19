@@ -27,6 +27,5 @@ describe('models.location', () => {
   it('fetches all the time', async () => {
     const results = await models.Location.findAll();
     assert.deepStrictEqual(results.length, 2);
-    console.log(results);
   });
 });
