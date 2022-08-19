@@ -8,10 +8,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      LocationUserId: {
+      LocationId: {
         type: Sequelize.INTEGER,
       },
-      VisitorsUserId: {
+      ProgramId: {
         type: Sequelize.INTEGER,
       },
       createdAt: {
@@ -23,6 +23,7 @@ module.exports = {
         type: Sequelize.DATE,
       },
     });
+    await queryInterface.sequelize.query('ALTER SEQUENCE "ProgramLocations_id_seq" RESTART WITH 100;');
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('ProgramLocations');
