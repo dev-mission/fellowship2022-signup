@@ -51,19 +51,19 @@ describe('/api/location', () => {
           .set('Accept', 'application/json')
           .send({
             Name: 'Jose',
-            Address: 'dev/mission',
+            Address: '360 Valencia',
           })
           .expect(HttpStatus.CREATED);
 
         const { id, Name, Address } = response.body; //checking response of service is correct
         assert(id);
         assert.deepStrictEqual(Name, 'Jose');
-        assert.deepStrictEqual(Address, 'Jose');
+        assert.deepStrictEqual(Address, '360 Valencia');
 
         const location = await models.Location.findByPk(id); //checking if it is found on data base
         assert(location);
         assert.deepStrictEqual(location.Name, 'Jose');
-        assert.deepStrictEqual(location.Address, 'Dev/Mission');
+        assert.deepStrictEqual(location.Address, '360 Valencia');
       });
     });
 

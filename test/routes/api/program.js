@@ -54,11 +54,11 @@ describe('/api/program', () => {
           })
           .expect(HttpStatus.CREATED);
 
-        const { id, Name} = response.body; //checking response of service is correct
+        const { id, Name } = response.body; //checking response of service is correct
         assert(id);
         assert.deepStrictEqual(Name, 'Jose');
 
-        const program = await models.program.findByPk(id); //checking if it is found on data base
+        const program = await models.Program.findByPk(id); //checking if it is found on data base
         assert(program);
         assert.deepStrictEqual(program.Name, 'Jose');
       });
@@ -71,7 +71,6 @@ describe('/api/program', () => {
           .set('Accept', 'application/json')
           .send({
             Name: 'Jose',
-
           })
           .expect(HttpStatus.OK);
 
@@ -79,7 +78,7 @@ describe('/api/program', () => {
         assert.deepStrictEqual(id, 1);
         assert.deepStrictEqual(Name, 'Jose');
 
-        const program = await models.program.findByPk(id);
+        const program = await models.Program.findByPk(id);
         assert(program);
         assert.deepStrictEqual(program.Name, 'Jose');
       });
@@ -88,7 +87,7 @@ describe('/api/program', () => {
     describe('DELETE /:id', () => {
       it('deletes an existing program', async () => {
         await testSession.delete('/api/program/1').expect(HttpStatus.OK);
-        const program = await models.program.findByPk(1);
+        const program = await models.Program.findByPk(1);
         assert.deepStrictEqual(program, null);
       });
     });
