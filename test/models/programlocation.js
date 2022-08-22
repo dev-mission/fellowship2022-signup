@@ -9,7 +9,7 @@ const models = require('../../models');
 
 describe('models.programlocation', () => {
   beforeEach(async () => {
-    await helper.loadFixtures(['programlocation']);
+    await helper.loadFixtures(['program', 'location', 'programlocation']);
   });
 
   it('create a new program location record', async () => {

@@ -10,9 +10,23 @@ module.exports = {
       },
       LocationId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: {
+            tableName: 'Locations',
+          },
+          key: 'id',
+        },
       },
       ProgramId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: {
+            tableName: 'Programs',
+          },
+          key: 'id',
+        },
       },
       createdAt: {
         allowNull: false,
@@ -22,6 +36,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
+    });
+    await queryInterface.addIndex('ProgramLocations', {
+      fields: ['LocationId', 'ProgramId'],
+      unique: true,
     });
     await queryInterface.sequelize.query('ALTER SEQUENCE "ProgramLocations_id_seq" RESTART WITH 100;');
   },
