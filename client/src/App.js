@@ -9,6 +9,7 @@ import Login from './Login';
 import PasswordRoutes from './Passwords/PasswordRoutes';
 import Register from './Register';
 import UserRoutes from './Users/UserRoutes';
+import Sheet from './Sheet';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/sheet" element={<Sheet />} />
           <Route path="/login" element={<Login />} />
           <Route path="/passwords/*" element={<PasswordRoutes />} />
           {process.env.REACT_APP_FEATURE_REGISTRATION === 'true' && <Route path="/register" element={<Register />} />}
