@@ -6,7 +6,7 @@ import { AuthContextProvider, AuthProtected } from './AuthContext';
 import Header from './Header';
 import Home from './Home';
 import Login from './Login';
-import LocationForm from './LocationForm';
+import LocationForm from './Dashboard/Locations/New';
 import PasswordRoutes from './Passwords/PasswordRoutes';
 import Register from './Register';
 import UserRoutes from './Users/UserRoutes';
