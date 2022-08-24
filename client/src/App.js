@@ -7,6 +7,7 @@ import Home from './Home';
 import Login from './Login';
 import PasswordRoutes from './Passwords/PasswordRoutes';
 import ProgramForm from './ProgramForm';
+import ProgramSheet from './ProgramSheet';
 import Register from './Register';
 import UserRoutes from './Users/UserRoutes';
 
@@ -20,7 +21,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route
-            path="/detail/new"
+            path="/dashboard/programs/new"
             element={
               <AuthProtected isAdminRequired={true}>
                 <ProgramForm />
@@ -28,7 +29,15 @@ function App() {
             }
           />
           <Route
-            path="/detail/:id/edit"
+            path="/dashboard/programs"
+            element={
+              <AuthProtected isAdminRequired={true}>
+                <ProgramSheet />
+              </AuthProtected>
+            }
+          />
+          <Route
+            path="/dashboard/programs/:id/edit"
             element={
               <AuthProtected isAdminRequired={true}>
                 <ProgramForm />

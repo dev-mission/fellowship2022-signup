@@ -36,21 +36,21 @@ const Api = {
       return instance.post('/api/auth/register', data);
     },
   },
-  programs: {
+  program: {
     index() {
-      return instance.get('/api/programs');
+      return instance.get('/api/program');
     },
     get(id) {
-      return instance.get(`/api/programs/${id}`);
+      return instance.get(`/api/program/${id}`);
     },
     create(data) {
-      return instance.post('/api/programs', data);
+      return instance.post('/api/program', data);
     },
     update(id, data) {
-      return instance.patch(`/api/programs/${id}`, data);
+      return instance.patch(`/api/program/${id}`, data);
     },
     delete(id) {
-      return instance.delete(`/api/programs/${id}`);
+      return instance.delete(`/api/program/${id}`);
     },
   },
   passwords: {

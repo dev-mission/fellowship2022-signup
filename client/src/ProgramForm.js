@@ -12,7 +12,7 @@ function ProgramForm() {
 
   useEffect(() => {
     if (id) {
-      Api.programs.get(id).then((response) => setData(response.data));
+      Api.program.get(id).then((response) => setData(response.data));
     }
   }, [id]);
 
@@ -21,11 +21,11 @@ function ProgramForm() {
     try {
       let response;
       if (id) {
-        response = await Api.programs.update(id, data);
+        response = await Api.program.update(id, data);
       } else {
-        response = await Api.programs.create(data);
+        response = await Api.program.create(data);
       }
-      navigate(`/detail/${response.data.id}`);
+      navigate(`/dashboard/programs`);
     } catch (error) {
       console.log(error);
     }
@@ -49,7 +49,7 @@ function ProgramForm() {
               </label>
               <input type="text" className="form-control" id="Name" name="Name" onChange={onChange} value={data.Name} />
             </div>
-            
+
             <button type="submit" className="btn btn-primary">
               Submit
             </button>

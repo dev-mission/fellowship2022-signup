@@ -5,12 +5,12 @@ import { useAuthContext } from './AuthContext';
 
 function Home() {
   const { user } = useAuthContext();
-  const [programs, setPrograms] = useState([]);
+  const [program, setProgram] = useState([]);
 
   useEffect(function () {
-    fetch('/api/programs')
+    fetch('/api/program')
       .then((response) => response.json())
-      .then((data) => setPrograms (data));
+      .then((data) => setProgram(data));
   }, []);
 
   return (
@@ -19,7 +19,7 @@ function Home() {
       {user?.isAdmin && (
         <div class="text-center">
           <p>
-            <Link to="/detail/new" className="btn btn-primary">
+            <Link to="/dashboard/programs/new" className="btn btn-primary">
               New Program
             </Link>
           </p>
