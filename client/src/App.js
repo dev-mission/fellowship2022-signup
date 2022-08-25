@@ -9,6 +9,8 @@ import PasswordRoutes from './Passwords/PasswordRoutes';
 import ProgramForm from './ProgramForm';
 import ProgramSheet from './ProgramSheet';
 import Register from './Register';
+import Sheet from './Sheet';
+import SignIn from './SignIn';
 import UserRoutes from './Users/UserRoutes';
 
 import './App.scss';
@@ -44,6 +46,11 @@ function App() {
               </AuthProtected>
             }
           />
+          {/* Kimon & Fatimah */}
+          <Route path="/sheet" element={<Sheet />} />
+
+          <Route path="/sheet/sign-in" element={<SignIn />} />
+
           <Route path="/login" element={<Login />} />
           <Route path="/passwords/*" element={<PasswordRoutes />} />
           {process.env.REACT_APP_FEATURE_REGISTRATION === 'true' && <Route path="/register" element={<Register />} />}

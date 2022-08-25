@@ -1,0 +1,10 @@
+[
+  {
+    "model": "ProgramLocation",
+    "data": {
+      "id": 1,
+      "LocationId": 1,
+      "ProgramId": 2
+    }
+  }
+]

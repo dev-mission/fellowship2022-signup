@@ -39,6 +39,5 @@ describe('models.visit', () => {
   it('fetches all the time', async () => {
     const results = await models.Visit.findAll();
     assert.deepStrictEqual(results.length, 1);
-    console.log(results);
   });
 });

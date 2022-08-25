@@ -25,6 +25,5 @@ describe('models.program', () => {
   it('fetches all the time', async () => {
     const results = await models.Program.findAll();
     assert.deepStrictEqual(results.length, 2);
-    console.log(results);
   });
 });
