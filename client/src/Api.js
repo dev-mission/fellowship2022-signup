@@ -53,6 +53,23 @@ const Api = {
       return instance.delete(`/api/locations/${id}`);
     },
   },
+  program: {
+    index() {
+      return instance.get('/api/program');
+    },
+    get(id) {
+      return instance.get(`/api/program/${id}`);
+    },
+    create(data) {
+      return instance.post('/api/program', data);
+    },
+    update(id, data) {
+      return instance.patch(`/api/program/${id}`, data);
+    },
+    delete(id) {
+      return instance.delete(`/api/program/${id}`);
+    },
+  },
   passwords: {
     reset(email) {
       return instance.post('/api/passwords', { email });

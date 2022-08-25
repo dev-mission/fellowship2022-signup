@@ -27,7 +27,5 @@ describe('models.programlocation', () => {
   it('fetches all the time', async () => {
     const results = await models.ProgramLocation.findAll();
     assert.deepStrictEqual(results.length, 1);
-    console.log(results);
-    console.log(results);
   });
 });
