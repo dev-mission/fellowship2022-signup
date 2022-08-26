@@ -1,4 +1,4 @@
-function Visit({ id, FirstName, LastName, PhoneNumber, Temperature, TimeIn }) {
+function Visit({ id, FirstName, LastName, PhoneNumber, Temperature, TimeIn, onClick }) {
   return (
     <tr>
       <td>{FirstName}</td>
@@ -7,7 +7,7 @@ function Visit({ id, FirstName, LastName, PhoneNumber, Temperature, TimeIn }) {
       <td>{Temperature}</td>
       <td>{TimeIn}</td>
       <td>
-        <button type="button" class="btn btn-outline-primary">
+        <button onClick={onClick} type="button" class="btn btn-outline-primary">
           Sign Out
         </button>
       </td>
