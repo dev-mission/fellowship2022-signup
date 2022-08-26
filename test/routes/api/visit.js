@@ -34,11 +34,93 @@ describe('/api/visit', () => {
       assert.deepStrictEqual(visit.ProgramId, 1);
       assert.deepStrictEqual(visit.LocationId, 1);
       assert.deepStrictEqual(visit.TimeIn, '2022-08-15T02:07:23.000Z');
-      assert.deepStrictEqual(visit.TimeOut, '2022-08-15T02:07:24.000Z');
+      assert.deepStrictEqual(visit.TimeOut, null);
     });
 
     it('returns NOT FOUND for an id not in the database', async () => {
       await testSession.get('/api/visit/0').expect(HttpStatus.NOT_FOUND);
+    });
+  });
+
+  describe('POST /', () => {
+    it('creates a new visit', async () => {
+      const response = await testSession //testing sending to the server
+        .post('/api/visit')
+        .set('Accept', 'application/json')
+        .send({
+          FirstName: 'Kimon',
+          LastName: 'Monokandilos',
+          PhoneNumber: '4155276516',
+          Temperature: '97',
+          ProgramId: 1,
+          LocationId: 1,
+        })
+        .expect(HttpStatus.CREATED);
+
+      const { id, FirstName, LastName, PhoneNumber, Temperature, ProgramId, LocationId, TimeIn, TimeOut } = response.body; //checking response of service is correct
+      assert(id);
+      assert.deepStrictEqual(FirstName, 'Kimon');
+      assert.deepStrictEqual(LastName, 'Monokandilos');
+      assert.deepStrictEqual(PhoneNumber, '4155276516');
+      assert.deepStrictEqual(Temperature, '97');
+      assert.deepStrictEqual(ProgramId, 1);
+      assert.deepStrictEqual(LocationId, 1);
+      assert(TimeIn);
+      assert.deepStrictEqual(TimeOut, null);
+
+      const visit = await models.Visit.findByPk(id); //checking if it is found on data base
+      assert(visit);
+      assert.deepStrictEqual(visit.FirstName, 'Kimon');
+      assert.deepStrictEqual(visit.LastName, 'Monokandilos');
+      assert.deepStrictEqual(visit.PhoneNumber, '4155276516');
+      assert.deepStrictEqual(visit.Temperature, '97');
+      assert.deepStrictEqual(visit.ProgramId, 1);
+      assert.deepStrictEqual(visit.LocationId, 1);
+      assert.deepStrictEqual(visit.TimeIn, new Date(TimeIn));
+      assert.deepStrictEqual(visit.TimeOut, null);
+    });
+  });
+
+  describe('PATCH /:id/sign-out', () => {
+    it('sets the TimeOut on an existing visit', async () => {
+      const response = await testSession.patch('/api/visit/1/sign-out').set('Accept', 'application/json').expect(HttpStatus.OK);
+
+      const { id, TimeOut } = response.body;
+      assert.deepStrictEqual(id, 1);
+      assert(TimeOut);
+
+      const visit = await models.Visit.findByPk(id);
+      assert(visit);
+      assert.deepStrictEqual(visit.TimeOut, new Date(TimeOut));
+    });
+  });
+
+  describe('PATCH /:id', () => {
+    it('updates an existing visit', async () => {
+      const response = await testSession
+        .patch('/api/visit/1')
+        .set('Accept', 'application/json')
+        .send({
+          FirstName: 'New',
+          LastName: 'User',
+          PhoneNumber: '4155551234',
+          Temperature: '98.6',
+        })
+        .expect(HttpStatus.OK);
+
+      const { id, FirstName, LastName, PhoneNumber, Temperature, ProgramId, LocationId, TimeIn, TimeOut } = response.body;
+      assert.deepStrictEqual(id, 1);
+      assert.deepStrictEqual(FirstName, 'New');
+      assert.deepStrictEqual(LastName, 'User');
+      assert.deepStrictEqual(PhoneNumber, '4155551234');
+      assert.deepStrictEqual(Temperature, '98.6');
+
+      const visit = await models.Visit.findByPk(id);
+      assert(visit);
+      assert.deepStrictEqual(visit.FirstName, 'New');
+      assert.deepStrictEqual(visit.LastName, 'User');
+      assert.deepStrictEqual(visit.PhoneNumber, '4155551234');
+      assert.deepStrictEqual(visit.Temperature, '98.6');
     });
   });
 
@@ -49,88 +131,6 @@ describe('/api/visit', () => {
         .set('Accept', 'application/json')
         .send({ email: 'admin.user@test.com', password: 'abcd1234' })
         .expect(HttpStatus.OK);
-    });
-
-    describe('POST /', () => {
-      it('creates a new visit', async () => {
-        const response = await testSession //testing sending to the server
-          .post('/api/visit')
-          .set('Accept', 'application/json')
-          .send({
-            FirstName: 'Kimon',
-            LastName: 'Monokandilos',
-            PhoneNumber: '4155276516',
-            Temperature: '97',
-            ProgramId: 1,
-            LocationId: 1,
-            TimeIn: '2022-08-15T02:07:23+0000',
-            TimeOut: '2022-08-15T02:07:24+0000',
-          })
-          .expect(HttpStatus.CREATED);
-
-        const { id, FirstName, LastName, PhoneNumber, Temperature, ProgramId, LocationId, TimeIn, TimeOut } = response.body; //checking response of service is correct
-        assert(id);
-        assert.deepStrictEqual(FirstName, 'Kimon');
-        assert.deepStrictEqual(LastName, 'Monokandilos');
-        assert.deepStrictEqual(PhoneNumber, '4155276516');
-        assert.deepStrictEqual(Temperature, '97');
-        assert.deepStrictEqual(ProgramId, 1);
-        assert.deepStrictEqual(LocationId, 1);
-        assert.deepStrictEqual(TimeIn, '2022-08-15T02:07:23.000Z');
-        assert.deepStrictEqual(TimeOut, '2022-08-15T02:07:24.000Z');
-
-        const visit = await models.Visit.findByPk(id); //checking if it is found on data base
-        assert(visit);
-        assert.deepStrictEqual(visit.FirstName, 'Kimon');
-        assert.deepStrictEqual(visit.LastName, 'Monokandilos');
-        assert.deepStrictEqual(visit.PhoneNumber, '4155276516');
-        assert.deepStrictEqual(visit.Temperature, '97');
-        assert.deepStrictEqual(visit.ProgramId, 1);
-        assert.deepStrictEqual(visit.LocationId, 1);
-        assert.deepStrictEqual(visit.TimeIn, new Date('2022-08-15T02:07:23+0000'));
-        assert.deepStrictEqual(visit.TimeOut, new Date('2022-08-15T02:07:24+0000'));
-      });
-    });
-
-    describe('PATCH /:id', () => {
-      it('updates an existing visit', async () => {
-        const response = await testSession
-          .patch('/api/visit/1')
-          .set('Accept', 'application/json')
-          .send({
-            FirstName: 'Kimon',
-            LastName: 'Monokandilos',
-            PhoneNumber: '4155276516',
-            Temperature: '97',
-            ProgramId: 1,
-            LocationId: 1,
-            TimeIn: '2022-08-15T02:07:23+0000',
-            TimeOut: '2022-08-15T02:07:24+0000',
-          })
-          .expect(HttpStatus.OK);
-
-        const { id, FirstName, LastName, PhoneNumber, Temperature, ProgramId, LocationId, TimeIn, TimeOut } = response.body;
-        assert.deepStrictEqual(id, 1);
-        assert.deepStrictEqual(FirstName, 'Kimon');
-        assert.deepStrictEqual(LastName, 'Monokandilos');
-        assert.deepStrictEqual(PhoneNumber, '4155276516');
-        assert.deepStrictEqual(Temperature, '97');
-        assert.deepStrictEqual(ProgramId, 1);
-        assert.deepStrictEqual(LocationId, 1);
-        assert.deepStrictEqual(TimeIn, '2022-08-15T02:07:23.000Z');
-        assert.deepStrictEqual(TimeOut, '2022-08-15T02:07:24.000Z');
-
-        const visit = await models.Visit.findByPk(id);
-        assert(visit);
-        assert.deepStrictEqual(visit.FirstName, 'Kimon');
-        assert.deepStrictEqual(visit.LastName, 'Monokandilos');
-        assert.deepStrictEqual(visit.PhoneNumber, '4155276516');
-        assert.deepStrictEqual(visit.Temperature, '97');
-        assert.deepStrictEqual(visit.ProgramId, 1);
-        assert.deepStrictEqual(visit.LocationId, 1);
-        assert.deepStrictEqual(visit.TimeIn, new Date('2022-08-15T02:07:23+0000'));
-        assert.deepStrictEqual(visit.TimeOut, new Date('2022-08-15T02:07:24+0000'));
-      });
     });
 
     describe('DELETE /:id', () => {
