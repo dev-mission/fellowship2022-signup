@@ -40,7 +40,12 @@ function LocationSheet() {
             <tr>
               <td>{location.Name}</td> <td>{location.Address}</td>{' '}
               <td>
-                <Link to={`/dashboard/locations/${location.id}/edit`} className="btn btn-primary">
+                <Link to={`/sheet`} className="btn btn-primary">
+                  Set Up Tablet
+                </Link>
+              </td>
+              <td>
+                <Link to={`/dashboard/locations/${location.id}/edit`} className="btn btn-outline-primary">
                   Edit
                 </Link>
               </td>
