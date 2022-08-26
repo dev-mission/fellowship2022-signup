@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import Visit from './Components/Visit';
 import logo from './images/logo.png';
 import { Link } from 'react-router-dom';
@@ -6,11 +7,21 @@ import Api from './Api';
 
 function Sheet() {
   const [items, setItems] = useState([]);
+  const { id } = useParams();
 
-  useEffect(function () {
-    const request = fetch(`/api/visit`);
-    request.then((response) => response.json()).then((data) => setItems(data));
-  }, []);
+  useEffect(
+    function () {
+      const request = fetch(`/api/visit`);
+      request.then((response) => response.json()).then((data) => setItems(data));
+      if (id) {
+        Api.locations.get(id).then((response) => {
+          const newData = { ...response.data };
+          setData(newData);
+        });
+      }
+    },
+    [id]
+  );
 
   async function onSignOut(item) {
     console.log('hello from onSignOut');

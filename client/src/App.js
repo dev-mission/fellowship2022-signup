@@ -82,7 +82,7 @@ function App() {
             }
           />
           {/* Kimon & Fatimah */}
-          <Route path="/sheet" element={<Sheet />} />
+          <Route path="/sheet/:id" element={<Sheet />} />
 
           <Route path="/sheet/sign-in" element={<SignIn />} />
 

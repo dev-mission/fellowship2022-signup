@@ -40,7 +40,7 @@ function LocationSheet() {
             <tr>
               <td>{location.Name}</td> <td>{location.Address}</td>{' '}
               <td>
-                <Link to={`/sheet`} className="btn btn-primary">
+                <Link to={`/sheet/${location.id}`} className="btn btn-primary">
                   Set Up Tablet
                 </Link>
               </td>
