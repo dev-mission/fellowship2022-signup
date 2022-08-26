@@ -24,7 +24,7 @@ function Home() {
   return (
     <main className="container">
       <div class="row">
-        <img src={bg} class="img-fluid" style={{ marginBottom: '20' + 'px', height: '250' + 'px' }} />
+        <img src={bg} class="img-fluid" style={{ marginBottom: '20' + 'px' }} />
       </div>
       <div class="row">
         <div class="col-sm-3">
