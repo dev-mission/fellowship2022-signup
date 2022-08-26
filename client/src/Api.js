@@ -38,19 +38,19 @@ const Api = {
   },
   locations: {
     index() {
-      return instance.get('/api/locations');
+      return instance.get('/api/location');
     },
     get(id) {
-      return instance.get(`/api/locations/${id}`);
+      return instance.get(`/api/location/${id}`);
     },
     create(data) {
-      return instance.post('/api/locations', data);
+      return instance.post('/api/location', data);
     },
     update(id, data) {
-      return instance.patch(`/api/locations/${id}`, data);
+      return instance.patch(`/api/location/${id}`, data);
     },
     delete(id) {
-      return instance.delete(`/api/locations/${id}`);
+      return instance.delete(`/api/location/${id}`);
     },
   },
   program: {

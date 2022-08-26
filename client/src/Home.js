@@ -26,7 +26,7 @@ function Home() {
       {user?.isAdmin && (
         <div class="text-center">
           <p>
-            <Link to="/detail/new" className="btn btn-primary">
+            <Link to="/dashboard/locations/new" className="btn btn-primary">
               New Location
             </Link>
             <Link to="/dashboard/programs/new" className="btn btn-primary">

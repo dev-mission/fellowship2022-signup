@@ -25,7 +25,7 @@ function LocationForm() {
       } else {
         response = await Api.locations.create(data);
       }
-      navigate(`/detail/${response.data.id}`);
+      navigate(`/dashboard/locations`);
     } catch (error) {
       console.log(error);
     }
