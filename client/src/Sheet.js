@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Visit from './Components/Visit';
 import logo from './images/logo.png';
+import { Link } from 'react-router-dom';
 
 function Sheet() {
   const [items, setItems] = useState([]);
@@ -42,6 +43,7 @@ function Sheet() {
               <th scope="col">Phone number</th>
               <th scope="col">Temperature</th>
               <th scope="col">Time in</th>
+              <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -59,6 +61,16 @@ function Sheet() {
             <Visit key="1" id="1" FirstName="First" LastName="Last" PhoneNumber="123456789" Temperature="96.7" TimeIn="5:06 PM" />
           </tbody>
         </table>
+      </div>
+      <div style={{ textAlign: 'center' }}>
+        <Link to="/sheet/sign-in">
+          <button
+            type="button"
+            class="btn btn-primary btn-lg home-button"
+            style={{ border: '1px solid black', padding: '10px  20px', textAlign: 'center' }}>
+            Sign in
+          </button>
+        </Link>
       </div>
     </main>
   );
