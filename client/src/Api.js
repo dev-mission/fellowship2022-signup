@@ -36,6 +36,59 @@ const Api = {
       return instance.post('/api/auth/register', data);
     },
   },
+
+  visits: {
+    index() {
+      return instance.get('/api/visits');
+    },
+    get(id) {
+      return instance.get(`/api/visits/${id}`);
+    },
+    create(data) {
+      return instance.post(`/api/visit`, data);
+    },
+    update(id, data) {
+      return instance.patch(`/api/visits/${id}`, data);
+    },
+    delete(id) {
+      return instance.delete(`/api/visits/${id}`);
+    },
+  },
+  locations: {
+    index() {
+      return instance.get('/api/location');
+    },
+    get(id) {
+      return instance.get(`/api/location/${id}`);
+    },
+    create(data) {
+      return instance.post('/api/location', data);
+    },
+    update(id, data) {
+      return instance.patch(`/api/location/${id}`, data);
+    },
+    delete(id) {
+      return instance.delete(`/api/location/${id}`);
+
+    },
+  },
+  program: {
+    index() {
+      return instance.get('/api/program');
+    },
+    get(id) {
+      return instance.get(`/api/program/${id}`);
+    },
+    create(data) {
+      return instance.post('/api/program', data);
+    },
+    update(id, data) {
+      return instance.patch(`/api/program/${id}`, data);
+    },
+    delete(id) {
+      return instance.delete(`/api/program/${id}`);
+    },
+  },
   passwords: {
     reset(email) {
       return instance.post('/api/passwords', { email });

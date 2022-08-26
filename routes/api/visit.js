@@ -23,7 +23,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/', interceptors.requireAdmin, async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const record = await models.Visit.create(
       _.pick(req.body, ['FirstName', 'LastName', 'PhoneNumber', 'Temperature', 'ProgramId', 'LocationId', 'TimeIn', 'TimeOut'])
