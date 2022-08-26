@@ -39,19 +39,22 @@ const Api = {
 
   visits: {
     index() {
-      return instance.get('/api/visits');
+      return instance.get('/api/visit');
     },
     get(id) {
-      return instance.get(`/api/visits/${id}`);
+      return instance.get(`/api/visit/${id}`);
     },
     create(data) {
       return instance.post(`/api/visit`, data);
     },
     update(id, data) {
-      return instance.patch(`/api/visits/${id}`, data);
+      return instance.patch(`/api/visit/${id}`, data);
+    },
+    signout(id) {
+      return instance.patch(`/api/visit/${id}/sign-out`);
     },
     delete(id) {
-      return instance.delete(`/api/visits/${id}`);
+      return instance.delete(`/api/visit/${id}`);
     },
   },
   locations: {
