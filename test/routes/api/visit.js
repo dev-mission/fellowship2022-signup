@@ -63,8 +63,6 @@ describe('/api/visit', () => {
             Temperature: '97',
             ProgramId: 1,
             LocationId: 1,
-            TimeIn: '2022-08-15T02:07:23+0000',
-            TimeOut: '2022-08-15T02:07:24+0000',
           })
           .expect(HttpStatus.CREATED);
 
@@ -76,8 +74,8 @@ describe('/api/visit', () => {
         assert.deepStrictEqual(Temperature, '97');
         assert.deepStrictEqual(ProgramId, 1);
         assert.deepStrictEqual(LocationId, 1);
-        assert.deepStrictEqual(TimeIn, '2022-08-15T02:07:23.000Z');
-        assert.deepStrictEqual(TimeOut, '2022-08-15T02:07:24.000Z');
+        assert(TimeIn);
+        assert.deepStrictEqual(TimeOut, null);
 
         const visit = await models.Visit.findByPk(id); //checking if it is found on data base
         assert(visit);
@@ -87,8 +85,8 @@ describe('/api/visit', () => {
         assert.deepStrictEqual(visit.Temperature, '97');
         assert.deepStrictEqual(visit.ProgramId, 1);
         assert.deepStrictEqual(visit.LocationId, 1);
-        assert.deepStrictEqual(visit.TimeIn, new Date('2022-08-15T02:07:23+0000'));
-        assert.deepStrictEqual(visit.TimeOut, new Date('2022-08-15T02:07:24+0000'));
+        assert.deepStrictEqual(visit.TimeIn, new Date(TimeIn));
+        assert.deepStrictEqual(visit.TimeOut, null);
       });
     });
 
