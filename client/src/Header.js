@@ -55,6 +55,30 @@ function Header() {
                 Home
               </Link>
             </li>
+            {user && (
+              <>
+                <li className="nav-item active">
+                  <Link className="nav-link" aria-current="page" to="/dashboard">
+                    Dashboard
+                  </Link>
+                </li>
+                <li className="nav-item active">
+                  <Link className="nav-link" aria-current="page" to="/dashboard/locations">
+                    Locations
+                  </Link>
+                </li>
+                <li className="nav-item active">
+                  <Link className="nav-link" aria-current="page" to="/dashboard/programs">
+                    Programs
+                  </Link>
+                </li>
+                <li className="nav-item active">
+                  <Link className="nav-link" aria-current="page" to="#">
+                    Reports
+                  </Link>
+                </li>
+              </>
+            )}
             <div className="flex-grow-1 d-flex justify-content-end">
               {user && (
                 <>
