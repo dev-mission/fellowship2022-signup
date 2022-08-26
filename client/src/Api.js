@@ -36,6 +36,24 @@ const Api = {
       return instance.post('/api/auth/register', data);
     },
   },
+
+  visits: {
+    index() {
+      return instance.get('/api/visits');
+    },
+    get(id) {
+      return instance.get(`/api/visits/${id}`);
+    },
+    create(data) {
+      return instance.post(`/api/visit`, data);
+    },
+    update(id, data) {
+      return instance.patch(`/api/visits/${id}`, data);
+    },
+    delete(id) {
+      return instance.delete(`/api/visits/${id}`);
+    },
+  },
   locations: {
     index() {
       return instance.get('/api/location');
@@ -51,6 +69,7 @@ const Api = {
     },
     delete(id) {
       return instance.delete(`/api/location/${id}`);
+
     },
   },
   program: {
