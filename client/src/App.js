@@ -5,6 +5,7 @@ import { AuthContextProvider, AuthProtected } from './AuthContext';
 import Header from './Header';
 import Home from './Home';
 import Login from './Login';
+import Dashboard from './Dashboard';
 import LocationForm from './LocationForm';
 import LocationSheet from './LocationSheet';
 import PasswordRoutes from './Passwords/PasswordRoutes';
@@ -69,6 +70,14 @@ function App() {
             element={
               <AuthProtected isAdminRequired={true}>
                 <ProgramForm />
+              </AuthProtected>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <AuthProtected isAdminRequired={true}>
+                <Dashboard />
               </AuthProtected>
             }
           />
