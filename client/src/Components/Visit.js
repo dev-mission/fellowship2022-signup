@@ -6,6 +6,11 @@ function Visit({ id, FirstName, LastName, PhoneNumber, Temperature, TimeIn }) {
       <td>{PhoneNumber}</td>
       <td>{Temperature}</td>
       <td>{TimeIn}</td>
+      <td>
+        <button type="button" class="btn btn-outline-primary">
+          Sign Out
+        </button>
+      </td>
     </tr>
   );
 }
