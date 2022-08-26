@@ -5,6 +5,8 @@ import './Header.scss';
 import Api from './Api';
 import { useAuthContext } from './AuthContext';
 
+import logo from './images/logo_header.png';
+
 function Header() {
   const navigate = useNavigate();
   const { user, setUser } = useAuthContext();
@@ -33,7 +35,8 @@ function Header() {
     <nav className="header navbar navbar-expand-md navbar-light bg-light fixed-top">
       <div className="container">
         <Link className="navbar-brand" to="/">
-          Full Stack Starter
+          <img src={logo} style={{ padding: '5' + 'px' }} />
+          SignMe
         </Link>
         <button
           className="navbar-toggler"

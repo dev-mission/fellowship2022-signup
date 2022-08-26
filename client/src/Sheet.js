@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Visit from './Components/Visit';
+import logo from './images/logo.png';
 
 function Sheet() {
   const [items, setItems] = useState([]);
@@ -11,9 +12,38 @@ function Sheet() {
 
   return (
     <main className="container">
-      <h1>Sheet</h1>
+      <h1>
+        <img src={logo} style={{ padding: '5' + 'px' }} />
+        SignMe in for:
+      </h1>
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">
+            Community Tech Support
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            Pre-apprenticeship Bootcamp
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            Staff
+          </a>
+        </li>
+      </ul>
       <div className="row">
-        <table class="table">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">First</th>
+              <th scope="col">Last</th>
+              <th scope="col">Phone number</th>
+              <th scope="col">Temperature</th>
+              <th scope="col">Time in</th>
+            </tr>
+          </thead>
           <tbody>
             {items.map((item) => (
               <Visit
