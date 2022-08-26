@@ -69,7 +69,6 @@ const Api = {
     },
     delete(id) {
       return instance.delete(`/api/location/${id}`);
-
     },
   },
   program: {
