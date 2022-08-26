@@ -15,8 +15,6 @@ import Register from './Register';
 import Sheet from './Sheet';
 import SignIn from './SignIn';
 import UserRoutes from './Users/UserRoutes';
-import Sheet from './Sheet';
-import SignIn from './SignIn';
 
 import './App.scss';
 

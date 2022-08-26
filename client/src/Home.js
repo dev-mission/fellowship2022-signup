@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 
 import { useAuthContext } from './AuthContext';
 
-
 function Home() {
   const { user } = useAuthContext();
   const [locations, setLocations] = useState([]);
