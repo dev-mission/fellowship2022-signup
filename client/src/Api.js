@@ -36,6 +36,23 @@ const Api = {
       return instance.post('/api/auth/register', data);
     },
   },
+  locations: {
+    index() {
+      return instance.get('/api/location');
+    },
+    get(id) {
+      return instance.get(`/api/location/${id}`);
+    },
+    create(data) {
+      return instance.post('/api/location', data);
+    },
+    update(id, data) {
+      return instance.patch(`/api/location/${id}`, data);
+    },
+    delete(id) {
+      return instance.delete(`/api/location/${id}`);
+    },
+  },
   program: {
     index() {
       return instance.get('/api/program');
