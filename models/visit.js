@@ -9,6 +9,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Visit.belongsTo(models.Program);
+      Visit.belongsTo(models.Location);
     }
   }
   Visit.init(
@@ -17,8 +19,6 @@ module.exports = (sequelize, DataTypes) => {
       LastName: DataTypes.STRING,
       PhoneNumber: DataTypes.STRING,
       Temperature: DataTypes.STRING,
-      ProgramId: DataTypes.INTEGER,
-      LocationId: DataTypes.INTEGER,
       TimeIn: DataTypes.DATE,
       TimeOut: DataTypes.DATE,
     },

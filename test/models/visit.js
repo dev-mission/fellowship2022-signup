@@ -9,7 +9,7 @@ const models = require('../../models');
 
 describe('models.visit', () => {
   beforeEach(async () => {
-    await helper.loadFixtures(['visits']);
+    await helper.loadFixtures(['program', 'location', 'visits']);
   });
 
   it('create a new visit record', async () => {

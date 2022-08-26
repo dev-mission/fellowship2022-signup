@@ -11,7 +11,7 @@ describe('/api/visit', () => {
   let testSession;
 
   beforeEach(async () => {
-    await helper.loadFixtures(['visits', 'users']);
+    await helper.loadFixtures(['program', 'location', 'visits', 'users']);
     testSession = session(app);
   });
 
