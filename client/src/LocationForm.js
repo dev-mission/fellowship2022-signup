@@ -13,7 +13,7 @@ function LocationForm() {
   });
 
   useEffect(() => {
-    Api.program.index().then((response) => setPrograms(response.data));
+    Api.programs.index().then((response) => setPrograms(response.data));
     if (id) {
       Api.locations.get(id).then((response) => {
         const newData = { ...response.data };

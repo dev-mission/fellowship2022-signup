@@ -11,12 +11,14 @@ function Sheet() {
 
   useEffect(
     function () {
-      const request = fetch(`/api/visit`);
-      request.then((response) => response.json()).then((data) => setItems(data));
+      Api.visits
+        .index()
+        .then((response) => response.json())
+        .then((data) => setItems(data));
       if (id) {
         Api.locations.get(id).then((response) => {
-          const newData = { ...response.data };
-          setData(newData);
+          // const newData = { ...response.data };
+          // setData(newData);
         });
       }
     },

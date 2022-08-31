@@ -1,31 +1,30 @@
 const assert = require('assert');
 const HttpStatus = require('http-status-codes');
-const _ = require('lodash');
 const session = require('supertest-session');
 
 const helper = require('../../helper');
 const app = require('../../../app');
 const models = require('../../../models');
 
-describe('/api/visit', () => {
+describe('/api/visits', () => {
   let testSession;
 
   beforeEach(async () => {
-    await helper.loadFixtures(['program', 'location', 'visits', 'users']);
+    await helper.loadFixtures(['programs', 'locations', 'visits', 'users']);
     testSession = session(app);
   });
 
   describe('GET /', () => {
-    it('returns a list of visits', async () => {
-      const response = await testSession.get('/api/visit').expect(HttpStatus.OK);
+    it('returns a list of Visits', async () => {
+      const response = await testSession.get('/api/visits').expect(HttpStatus.OK);
       const visit = response.body;
       assert.deepStrictEqual(visit.length, 1);
     });
   });
 
   describe('GET /:id', () => {
-    it('returns one visit by id', async () => {
-      const response = await testSession.get('/api/visit/1').expect(HttpStatus.OK);
+    it('returns one Visit by id', async () => {
+      const response = await testSession.get('/api/visits/1').expect(HttpStatus.OK);
       const visit = response.body; // all data coming back from server
       assert.deepStrictEqual(visit.FirstName, 'Kimon');
       assert.deepStrictEqual(visit.LastName, 'Monokandilos');
@@ -44,8 +43,8 @@ describe('/api/visit', () => {
 
   describe('POST /', () => {
     it('creates a new visit', async () => {
-      const response = await testSession //testing sending to the server
-        .post('/api/visit')
+      const response = await testSession // testing sending to the server
+        .post('/api/visits')
         .set('Accept', 'application/json')
         .send({
           FirstName: 'Kimon',
@@ -57,7 +56,7 @@ describe('/api/visit', () => {
         })
         .expect(HttpStatus.CREATED);
 
-      const { id, FirstName, LastName, PhoneNumber, Temperature, ProgramId, LocationId, TimeIn, TimeOut } = response.body; //checking response of service is correct
+      const { id, FirstName, LastName, PhoneNumber, Temperature, ProgramId, LocationId, TimeIn, TimeOut } = response.body; // checking response of service is correct
       assert(id);
       assert.deepStrictEqual(FirstName, 'Kimon');
       assert.deepStrictEqual(LastName, 'Monokandilos');
@@ -68,7 +67,7 @@ describe('/api/visit', () => {
       assert(TimeIn);
       assert.deepStrictEqual(TimeOut, null);
 
-      const visit = await models.Visit.findByPk(id); //checking if it is found on data base
+      const visit = await models.Visit.findByPk(id); // checking if it is found on data base
       assert(visit);
       assert.deepStrictEqual(visit.FirstName, 'Kimon');
       assert.deepStrictEqual(visit.LastName, 'Monokandilos');
@@ -83,7 +82,7 @@ describe('/api/visit', () => {
 
   describe('PATCH /:id/sign-out', () => {
     it('sets the TimeOut on an existing visit', async () => {
-      const response = await testSession.patch('/api/visit/1/sign-out').set('Accept', 'application/json').expect(HttpStatus.OK);
+      const response = await testSession.patch('/api/visits/1/sign-out').set('Accept', 'application/json').expect(HttpStatus.OK);
 
       const { id, TimeOut } = response.body;
       assert.deepStrictEqual(id, 1);
@@ -98,7 +97,7 @@ describe('/api/visit', () => {
   describe('PATCH /:id', () => {
     it('updates an existing visit', async () => {
       const response = await testSession
-        .patch('/api/visit/1')
+        .patch('/api/visits/1')
         .set('Accept', 'application/json')
         .send({
           FirstName: 'New',
@@ -108,7 +107,7 @@ describe('/api/visit', () => {
         })
         .expect(HttpStatus.OK);
 
-      const { id, FirstName, LastName, PhoneNumber, Temperature, ProgramId, LocationId, TimeIn, TimeOut } = response.body;
+      const { id, FirstName, LastName, PhoneNumber, Temperature } = response.body;
       assert.deepStrictEqual(id, 1);
       assert.deepStrictEqual(FirstName, 'New');
       assert.deepStrictEqual(LastName, 'User');
@@ -135,7 +134,7 @@ describe('/api/visit', () => {
 
     describe('DELETE /:id', () => {
       it('deletes an existing visit', async () => {
-        await testSession.delete('/api/visit/1').expect(HttpStatus.OK);
+        await testSession.delete('/api/visits/1').expect(HttpStatus.OK);
         const visit = await models.Visit.findByPk(1);
         assert.deepStrictEqual(visit, null);
       });

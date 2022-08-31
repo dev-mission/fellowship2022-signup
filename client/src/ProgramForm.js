@@ -15,7 +15,7 @@ function ProgramForm() {
   useEffect(() => {
     Api.locations.index().then((response) => setLocations(response.data));
     if (id) {
-      Api.program.get(id).then((response) => {
+      Api.programs.get(id).then((response) => {
         const newData = { ...response.data };
         newData.LocationIds = newData.Locations.map((loc) => loc.id);
         setData(newData);
@@ -28,9 +28,9 @@ function ProgramForm() {
     try {
       let response;
       if (id) {
-        response = await Api.program.update(id, data);
+        response = await Api.programs.update(id, data);
       } else {
-        response = await Api.program.create(data);
+        response = await Api.programs.create(data);
       }
       navigate(`/dashboard/programs`);
     } catch (error) {

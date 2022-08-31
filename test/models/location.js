@@ -1,24 +1,20 @@
 const assert = require('assert');
-const _ = require('lodash');
-const fs = require('fs-extra');
-const path = require('path');
-const { v4: uuid } = require('uuid');
 
 const helper = require('../helper');
 const models = require('../../models');
 
-describe('models.location', () => {
+describe('models.Location', () => {
   beforeEach(async () => {
-    await helper.loadFixtures(['location']);
+    await helper.loadFixtures(['locations']);
   });
 
   it('create a new location record', async () => {
-    let Location = models.Location.build({
+    const Location = models.Location.build({
       Name: 'Ben',
       Address: '360 Valencia',
     });
     assert.deepStrictEqual(Location.id, null);
-    await Location.save(); //save to data base, id will generate after it save
+    await Location.save(); // save to data base, id will generate after it save
     assert(Location.id);
 
     assert.deepStrictEqual(Location.Name, 'Ben');

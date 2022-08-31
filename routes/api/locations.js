@@ -8,11 +8,18 @@ const helpers = require('../helpers');
 
 const router = express.Router();
 
-//http methods
-router.get('/', async (req, res) => {
-  const records = await models.Location.findAll({
+// http methods
+router.get('/', interceptors.requireAdmin, async (req, res) => {
+  const page = req.query.page || 1;
+  const { records, pages, total } = await models.Location.paginate({
+    page,
     include: models.Program,
+    order: [
+      ['Name', 'ASC'],
+      ['id', 'ASC'],
+    ],
   });
+  helpers.setPaginationHeaders(req, res, page, pages, total);
   res.json(records.map((r) => r.toJSON()));
 });
 
@@ -53,7 +60,7 @@ router.patch('/:id', interceptors.requireAdmin, async (req, res) => {
     await models.sequelize.transaction(async (transaction) => {
       record = await models.Location.findByPk(req.params.id, { transaction });
       if (record) {
-        await record.update(_.pick(req.body, ['Name', 'Address']), { transaction }); //doing mutiple things on data base, and prevent something happen in the same time
+        await record.update(_.pick(req.body, ['Name', 'Address']), { transaction }); // doing mutiple things on data base, and prevent something happen in the same time
         await record.setPrograms(req.body.ProgramIds ?? [], { transaction });
       }
     });

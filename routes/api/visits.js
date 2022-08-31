@@ -8,18 +8,19 @@ const helpers = require('../helpers');
 
 const router = express.Router();
 
-//http methods
+// http methods
 router.get('/', async (req, res) => {
-  const records = await models.Program.findAll({
-    include: models.Location,
+  const page = req.query.page || 1;
+  const { records, pages, total } = await models.Visit.paginate({
+    page,
+    order: [['TimeIn', 'ASC']],
   });
+  helpers.setPaginationHeaders(req, res, page, pages, total);
   res.json(records.map((r) => r.toJSON()));
 });
 
 router.get('/:id', async (req, res) => {
-  const record = await models.Program.findByPk(req.params.id, {
-    include: models.Location,
-  });
+  const record = await models.Visit.findByPk(req.params.id);
   if (record) {
     res.json(record.toJSON());
   } else {
@@ -27,12 +28,11 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/', interceptors.requireAdmin, async (req, res) => {
+router.post('/', async (req, res) => {
   try {
-    let record;
-    await models.sequelize.transaction(async (transaction) => {
-      record = await models.Program.create(_.pick(req.body, ['Name']));
-      await record.setLocations(req.body.LocationIds ?? [], { transaction });
+    const record = await models.Visit.create({
+      ..._.pick(req.body, ['FirstName', 'LastName', 'PhoneNumber', 'Temperature', 'ProgramId', 'LocationId']),
+      TimeIn: new Date(),
     });
     res.status(HttpStatus.CREATED).json(record.toJSON());
   } catch (error) {
@@ -47,14 +47,39 @@ router.post('/', interceptors.requireAdmin, async (req, res) => {
   }
 });
 
-router.patch('/:id', interceptors.requireAdmin, async (req, res) => {
+router.patch('/:id/sign-out', async (req, res) => {
   try {
     let record;
     await models.sequelize.transaction(async (transaction) => {
-      record = await models.Program.findByPk(req.params.id, { transaction });
+      record = await models.Visit.findByPk(req.params.id, { transaction });
       if (record) {
-        await record.update(_.pick(req.body, ['Name']), { transaction }); //doing mutiple things on data base, and prevent something happen in the same time
-        await record.setLocations(req.body.LocationIds ?? [], { transaction });
+        await record.update({ TimeOut: new Date() }, { transaction }); // doing mutiple things on data base, and prevent something happen in the same time
+      }
+    });
+    if (record) {
+      res.json(record.toJSON());
+    } else {
+      res.status(HttpStatus.NOT_FOUND).end();
+    }
+  } catch (error) {
+    if (error.name === 'SequelizeValidationError') {
+      res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        errors: error.errors,
+      });
+    } else {
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR).end();
+    }
+  }
+});
+
+router.patch('/:id', async (req, res) => {
+  try {
+    let record;
+    await models.sequelize.transaction(async (transaction) => {
+      record = await models.Visit.findByPk(req.params.id, { transaction });
+      if (record) {
+        await record.update(_.pick(req.body, ['FirstName', 'LastName', 'PhoneNumber', 'Temperature']), { transaction }); // doing mutiple things on data base, and prevent something happen in the same time
       }
     });
     if (record) {
@@ -78,7 +103,7 @@ router.delete('/:id', interceptors.requireAdmin, async (req, res) => {
   try {
     let record;
     await models.sequelize.transaction(async (transaction) => {
-      record = await models.Program.findByPk(req.params.id, { transaction });
+      record = await models.Visit.findByPk(req.params.id, { transaction });
       if (record) {
         await record.destroy({ transaction });
       }
