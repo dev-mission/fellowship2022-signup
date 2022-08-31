@@ -1,28 +1,19 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 import Api from './Api';
-import { useAuthContext } from './AuthContext';
 
 function LocationSheet() {
-  const { user } = useAuthContext();
   const [locations, setLocations] = useState([]); //item is what you put in []
 
   useEffect(function () {
-    const request = fetch('/api/location');
-    request
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setLocations(data);
-      });
+    Api.locations.index().then((response) => {
+      setLocations(response.data);
+    });
   }, []);
 
   return (
     <main className="container">
-      {/* <div className="row justify-content-center">
-        <div className="col col-sm-10 col-md-8 col-lg-6 col-xl-4"> */}
       <h1>Locations</h1>
       <Link to="/dashboard/locations/new" className="btn btn-primary">
         Add New Location
@@ -53,8 +44,6 @@ function LocationSheet() {
           ))}
         </tbody>
       </table>
-      {/* </div>
-      </div> */}
     </main>
   );
 }

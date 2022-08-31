@@ -1,26 +1,6 @@
 import bg from './images/bgnew.jpg';
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-
-import { useAuthContext } from './AuthContext';
 
 function Home() {
-  const { user } = useAuthContext();
-  const [locations, setLocations] = useState([]);
-
-  useEffect(function () {
-    fetch('/api/locations')
-      .then((response) => response.json())
-      .then((data) => setLocations(data));
-  }, []);
-  const [program, setProgram] = useState([]);
-
-  useEffect(function () {
-    fetch('/api/program')
-      .then((response) => response.json())
-      .then((data) => setProgram(data));
-  }, []);
-
   return (
     <main className="container">
       <div class="row">
