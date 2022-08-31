@@ -83,7 +83,6 @@ function Sheet() {
                   onClick={() => onSignOut(item)}
                 />
               ))}
-            <Visit key="1" id="1" FirstName="First" LastName="Last" PhoneNumber="123456789" Temperature="96.7" TimeIn="5:06 PM" />
           </tbody>
         </table>
       </div>
