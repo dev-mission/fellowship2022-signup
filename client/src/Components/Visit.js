@@ -7,7 +7,7 @@ function Visit({ id, FirstName, LastName, PhoneNumber, Temperature, TimeIn, onCl
       <td>{Temperature}</td>
       <td>{TimeIn}</td>
       <td>
-        <button onClick={onClick} type="button" class="btn btn-outline-primary">
+        <button onClick={onClick} type="button" className="btn btn-outline-primary">
           Sign Out
         </button>
       </td>

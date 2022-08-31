@@ -1,16 +1,26 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 import Api from './Api';
+import { useAuthContext } from './AuthContext';
 
 function LocationSheet() {
-  const [locations, setLocations] = useState([]); //item is what you put in []
+  const [locations, setLocations] = useState([]);
+  const { setUser } = useAuthContext();
+  const navigate = useNavigate();
 
   useEffect(function () {
     Api.locations.index().then((response) => {
       setLocations(response.data);
     });
   }, []);
+
+  async function onSetupTablet(event, locationId) {
+    event.preventDefault();
+    await Api.auth.logout();
+    setUser(null);
+    navigate(`/sheet/${locationId}`);
+  }
 
   return (
     <main className="container">
@@ -29,13 +39,12 @@ function LocationSheet() {
         <tbody>
           {locations.map((location) => (
             <tr>
-              <td>{location.Name}</td> <td>{location.Address}</td>{' '}
+              <td>{location.Name}</td>
+              <td>{location.Address}</td>
               <td>
-                <Link to={`/sheet/${location.id}`} className="btn btn-primary">
+                <a onClick={(event) => onSetupTablet(event, location.id)} href={`/sheet/${location.id}`} className="btn btn-primary me-3">
                   Set Up Tablet
-                </Link>
-              </td>
-              <td>
+                </a>
                 <Link to={`/dashboard/locations/${location.id}/edit`} className="btn btn-outline-primary">
                   Edit
                 </Link>

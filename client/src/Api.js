@@ -38,8 +38,9 @@ const Api = {
   },
 
   visits: {
-    index() {
-      return instance.get('/api/visits');
+    index(params) {
+      const { programId, locationId } = params ?? {};
+      return instance.get('/api/visits', { params: { programId, locationId } });
     },
     get(id) {
       return instance.get(`/api/visits/${id}`);

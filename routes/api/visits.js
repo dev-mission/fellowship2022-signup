@@ -11,10 +11,22 @@ const router = express.Router();
 // http methods
 router.get('/', async (req, res) => {
   const page = req.query.page || 1;
-  const { records, pages, total } = await models.Visit.paginate({
+  const options = {
+    where: {},
     page,
     order: [['TimeIn', 'ASC']],
-  });
+  };
+  const { locationId, programId } = req.query;
+  if (locationId) {
+    options.where['LocationId'] = locationId;
+  }
+  if (programId) {
+    options.where['ProgramId'] = programId;
+  }
+  if (!req.user) {
+    options.where['TimeOut'] = null;
+  }
+  const { records, pages, total } = await models.Visit.paginate(options);
   helpers.setPaginationHeaders(req, res, page, pages, total);
   res.json(records.map((r) => r.toJSON()));
 });

@@ -1,4 +1,3 @@
-// import LocationForm from './LocationForm';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
 import { AuthContextProvider, AuthProtected } from './AuthContext';
@@ -84,7 +83,7 @@ function App() {
           {/* Kimon & Fatimah */}
           <Route path="/sheet/:id" element={<Sheet />} />
 
-          <Route path="/sheet/sign-in" element={<SignIn />} />
+          <Route path="/sheet/:id/sign-in" element={<SignIn />} />
 
           <Route path="/login" element={<Login />} />
           <Route path="/passwords/*" element={<PasswordRoutes />} />
