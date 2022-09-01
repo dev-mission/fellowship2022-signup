@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Api from './Api';
+
+import Api from '../../Api';
 
 function LocationForm() {
   const navigate = useNavigate();
@@ -26,11 +27,10 @@ function LocationForm() {
   async function onSubmit(event) {
     event.preventDefault();
     try {
-      let response;
       if (id) {
-        response = await Api.locations.update(id, data);
+        await Api.locations.update(id, data);
       } else {
-        response = await Api.locations.create(data);
+        await Api.locations.create(data);
       }
       navigate(`/dashboard/locations`);
     } catch (error) {

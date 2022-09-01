@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import Api from './Api';
+import Api from '../../Api';
 
 function ProgramForm() {
   const navigate = useNavigate();
@@ -26,11 +26,10 @@ function ProgramForm() {
   async function onSubmit(event) {
     event.preventDefault();
     try {
-      let response;
       if (id) {
-        response = await Api.programs.update(id, data);
+        await Api.programs.update(id, data);
       } else {
-        response = await Api.programs.create(data);
+        await Api.programs.create(data);
       }
       navigate(`/dashboard/programs`);
     } catch (error) {

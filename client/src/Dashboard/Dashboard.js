@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import { useAuthContext } from './AuthContext';
+import { useAuthContext } from '../AuthContext';
 
 function Dashboard() {
   const { user } = useAuthContext();

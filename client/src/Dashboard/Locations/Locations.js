@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
-import Api from './Api';
-import { useAuthContext } from './AuthContext';
+import Api from '../../Api';
+import { useAuthContext } from '../../AuthContext';
 
-function LocationSheet() {
+function Locations() {
   const [locations, setLocations] = useState([]);
   const { setUser } = useAuthContext();
   const navigate = useNavigate();
@@ -56,4 +56,4 @@ function LocationSheet() {
     </main>
   );
 }
-export default LocationSheet;
+export default Locations;

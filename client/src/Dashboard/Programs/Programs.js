@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import Api from './Api';
+import Api from '../../Api';
 
-function ProgramSheet() {
+function Programs() {
   const [programs, setPrograms] = useState([]);
 
   useEffect(function () {
@@ -41,4 +41,4 @@ function ProgramSheet() {
     </main>
   );
 }
-export default ProgramSheet;
+export default Programs;
