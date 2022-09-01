@@ -66,6 +66,14 @@ describe('/api/locations', () => {
       });
     });
 
+    describe('GET /:id/setup', () => {
+      it('returns an authentication token and logs out the admin user', async () => {
+        const response = await testSession.get('/api/locations/1/setup').expect(HttpStatus.OK);
+        assert(response.headers['set-cookie'].find((cookie) => cookie.startsWith('sheet-token=')));
+        await testSession.get('/api/locations/1/setup').expect(HttpStatus.UNAUTHORIZED);
+      });
+    });
+
     describe('PATCH /:id', () => {
       it('updates an existing Location', async () => {
         const response = await testSession

@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const express = require('express');
 const HttpStatus = require('http-status-codes');
 const _ = require('lodash');
@@ -21,6 +22,19 @@ router.get('/', interceptors.requireAdmin, async (req, res) => {
   });
   helpers.setPaginationHeaders(req, res, page, pages, total);
   res.json(records.map((r) => r.toJSON()));
+});
+
+router.get('/:id/setup', interceptors.requireAdmin, async (req, res) => {
+  const record = await models.Location.findByPk(req.params.id);
+  if (record) {
+    req.logout();
+    const nonce = crypto.randomBytes(8).toString('hex');
+    const hash = crypto.createHash('sha256', process.env.SESSION_SECRET).update(`${record.id}`).update(nonce).digest('hex');
+    res.cookie('sheet-token', `${record.id}.${nonce}.${hash}`, { signed: true });
+    res.status(HttpStatus.OK).end();
+  } else {
+    res.status(HttpStatus.NOT_FOUND).end();
+  }
 });
 
 router.get('/:id', async (req, res) => {

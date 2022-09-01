@@ -3,6 +3,7 @@ require('dotenv').config();
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
 const logger = require('morgan');
 const passport = require('passport');
@@ -32,6 +33,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 /// support forwarded headers from intermediate proxies
 app.set('trust proxy', 1);
+/// set up generic cookie handling
+app.use(cookieParser(process.env.SESSION_SECRET));
 /// set up session handling in cookies
 app.use(
   cookieSession({

@@ -17,7 +17,7 @@ function LocationSheet() {
 
   async function onSetupTablet(event, locationId) {
     event.preventDefault();
-    await Api.auth.logout();
+    await Api.locations.setup(locationId);
     setUser(null);
     navigate(`/sheet/${locationId}`);
   }
@@ -38,7 +38,7 @@ function LocationSheet() {
         </thead>
         <tbody>
           {locations.map((location) => (
-            <tr>
+            <tr key={location.id}>
               <td>{location.Name}</td>
               <td>{location.Address}</td>
               <td>

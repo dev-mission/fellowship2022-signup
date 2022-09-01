@@ -68,6 +68,9 @@ const Api = {
     create(data) {
       return instance.post('/api/locations', data);
     },
+    setup(id) {
+      return instance.get(`/api/locations/${id}/setup`);
+    },
     update(id, data) {
       return instance.patch(`/api/locations/${id}`, data);
     },

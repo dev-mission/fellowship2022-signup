@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const express = require('express');
 const HttpStatus = require('http-status-codes');
 const _ = require('lodash');
@@ -8,8 +9,27 @@ const helpers = require('../helpers');
 
 const router = express.Router();
 
+async function requireToken(req, res, next) {
+  if (req.user?.isAdmin) {
+    next();
+  } else {
+    req.token = req.signedCookies['sheet-token'];
+    if (!req.token) {
+      res.status(HttpStatus.UNAUTHORIZED).end();
+    } else {
+      const parts = req.token.split('.');
+      const hash = crypto.createHash('sha256', process.env.SESSION_SECRET).update(parts[0]).update(parts[1]).digest('hex');
+      if (hash !== parts[2]) {
+        res.status(HttpStatus.UNAUTHORIZED).end();
+      } else {
+        next();
+      }
+    }
+  }
+}
+
 // http methods
-router.get('/', async (req, res) => {
+router.get('/', requireToken, async (req, res) => {
   const page = req.query.page || 1;
   const options = {
     where: {},
@@ -18,20 +38,27 @@ router.get('/', async (req, res) => {
   };
   const { locationId, programId } = req.query;
   if (locationId) {
-    options.where['LocationId'] = locationId;
+    options.where.LocationId = locationId;
+    if (req.token) {
+      const parts = req.token.split('.');
+      if (locationId !== parts[0]) {
+        res.status(HttpStatus.UNAUTHORIZED).end();
+        return;
+      }
+    }
   }
   if (programId) {
-    options.where['ProgramId'] = programId;
+    options.where.ProgramId = programId;
   }
   if (!req.user) {
-    options.where['TimeOut'] = null;
+    options.where.TimeOut = null;
   }
   const { records, pages, total } = await models.Visit.paginate(options);
   helpers.setPaginationHeaders(req, res, page, pages, total);
   res.json(records.map((r) => r.toJSON()));
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', requireToken, async (req, res) => {
   const record = await models.Visit.findByPk(req.params.id);
   if (record) {
     res.json(record.toJSON());
@@ -40,7 +67,14 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', requireToken, async (req, res) => {
+  if (req.token) {
+    const parts = req.token.split('.');
+    if (`${req.body.LocationId}` !== parts[0]) {
+      res.status(HttpStatus.UNAUTHORIZED).end();
+      return;
+    }
+  }
   try {
     const record = await models.Visit.create({
       ..._.pick(req.body, ['FirstName', 'LastName', 'PhoneNumber', 'Temperature', 'ProgramId', 'LocationId']),
@@ -59,7 +93,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.patch('/:id/sign-out', async (req, res) => {
+router.patch('/:id/sign-out', requireToken, async (req, res) => {
   try {
     let record;
     await models.sequelize.transaction(async (transaction) => {
@@ -85,7 +119,7 @@ router.patch('/:id/sign-out', async (req, res) => {
   }
 });
 
-router.patch('/:id', async (req, res) => {
+router.patch('/:id', requireToken, async (req, res) => {
   try {
     let record;
     await models.sequelize.transaction(async (transaction) => {
