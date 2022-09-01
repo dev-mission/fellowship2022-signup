@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import Api from './Api';
+
+import Api from '../Api';
 
 function SignIn() {
   const navigate = useNavigate();
@@ -30,6 +31,10 @@ function SignIn() {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  function onCancel() {
+    navigate(-1);
   }
 
   function onChange(event) {
@@ -106,8 +111,13 @@ function SignIn() {
                   ))}
                 </div>
                 <div className="mb-3 d-grid">
-                  <button type="submit" className="btn btn-primary">
+                  <button type="submit" className="btn btn-lg btn-primary">
                     Submit
+                  </button>
+                </div>
+                <div className="d-grid">
+                  <button type="button" className="btn btn-lg btn-outline-secondary" onClick={onCancel}>
+                    Cancel
                   </button>
                 </div>
               </form>

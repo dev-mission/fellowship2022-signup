@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
 import './Header.scss';
+import brand from './images/brand.png';
 import Api from './Api';
 import { useAuthContext } from './AuthContext';
 
@@ -32,7 +33,8 @@ function Header() {
   return (
     <nav className="header navbar navbar-expand-md navbar-light bg-light fixed-top">
       <div className="container">
-        <Link className="navbar-brand" to="/">
+        <Link className="navbar-brand d-flex" to="/">
+          <img src={brand} alt="" width="30" height="30" className="me-1" />
           SignMe
         </Link>
         <button

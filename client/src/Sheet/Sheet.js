@@ -1,10 +1,12 @@
 import classNames from 'classnames';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, useSearchParams, Link } from 'react-router-dom';
+import { DateTime } from 'luxon';
 
-import Api from './Api';
-import Visit from './Components/Visit';
-import logo from './images/logo.png';
+import Api from '../Api';
+import brand from '../images/brand.png';
+
+import './Sheet.scss';
 
 function Sheet() {
   const { id } = useParams();
@@ -46,25 +48,31 @@ function Sheet() {
   }
 
   return (
-    <main className="container">
-      <h1>
-        <img src={logo} style={{ padding: '5px' }} alt="SignMe Logo" />
-        SignMe in for:
-      </h1>
-      <ul className="nav nav-tabs">
-        {location?.Programs.map((program) => (
-          <li key={`program-${program.id}`} className="nav-item">
-            <Link to={`?programId=${program.id}`} className={classNames('nav-link', { active: selectedProgramId === program.id })}>
-              {program.Name}
-            </Link>
-          </li>
-        ))}
-      </ul>
-      <table className="table table-striped">
+    <main className="container sheet">
+      <div className="d-flex align-items-bottom mb-5">
+        <h2 className="d-flex align-items-center mb-0 pe-3 sheet__header">
+          <img src={brand} alt="SignMe Logo" width="48" height="48" className="me-2" />
+          SignMe in for:
+        </h2>
+        <ul className="nav nav-tabs flex-grow-1">
+          {location?.Programs.map((program) => (
+            <li key={`program-${program.id}`} className="nav-item">
+              <Link to={`?programId=${program.id}`} className={classNames('nav-link', { active: selectedProgramId === program.id })}>
+                <h4>{program.Name}</h4>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="text-center">
+        <Link to={`/sheet/${id}/sign-in?programId=${selectedProgramId}`} className="btn btn-primary btn-lg sheet__button">
+          Sign in
+        </Link>
+      </div>
+      <table className="table table-striped sheet__table">
         <thead>
           <tr>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
+            <th scope="col">Name</th>
             <th scope="col">Phone number</th>
             <th scope="col">Temperature</th>
             <th scope="col">Time in</th>
@@ -75,28 +83,24 @@ function Sheet() {
           {visits
             .filter((item) => !item.TimeOut)
             .map((item) => (
-              <Visit
-                key={item.id}
-                id={item.id}
-                FirstName={item.FirstName}
-                LastName={item.LastName}
-                PhoneNumber={item.PhoneNumber}
-                Temperature={item.Temperature}
-                TimeIn={item.TimeIn}
-                onClick={() => onSignOut(item)}
-              />
+              <tr key={item.id}>
+                <td>
+                  {item.FirstName} {item.LastName?.substring(0, 1)}.
+                </td>
+                <td>xxx-xxx-{item.PhoneNumber?.slice(-4)}</td>
+                <td>{item.Temperature}</td>
+                <td>{DateTime.fromISO(item.TimeIn).toLocaleString(DateTime.TIME_SIMPLE)}</td>
+                <td>
+                  <button onClick={() => onSignOut(item)} type="button" className="btn btn-outline-primary">
+                    Sign Out
+                  </button>
+                </td>
+              </tr>
             ))}
         </tbody>
       </table>
-      <div style={{ textAlign: 'center' }}>
-        <Link to={`/sheet/${id}/sign-in?programId=${selectedProgramId}`}>
-          <button
-            type="button"
-            className="btn btn-primary btn-lg home-button"
-            style={{ border: '1px solid black', padding: '10px  20px', textAlign: 'center' }}>
-            Sign in
-          </button>
-        </Link>
+      <div className="sheet__footer">
+        <b>{location?.Name}</b>, {location?.Address}
       </div>
     </main>
   );

@@ -7,8 +7,7 @@ import Login from './Login';
 import DashboardRoutes from './Dashboard/DashboardRoutes';
 import PasswordRoutes from './Passwords/PasswordRoutes';
 import Register from './Register';
-import Sheet from './Sheet';
-import SignIn from './SignIn';
+import SheetRoutes from './Sheet/SheetRoutes';
 import UserRoutes from './Users/UserRoutes';
 
 import './App.scss';
@@ -18,8 +17,7 @@ function App() {
     <AuthContextProvider>
       <Router>
         <Routes>
-          <Route path="/sheet/:id/sign-in" element={<SignIn />} />
-          <Route path="/sheet/:id" element={<Sheet />} />
+          <Route path="/sheet/*" element={<SheetRoutes />} />
           <Route
             path="/*"
             element={
