@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { useState, useEffect } from 'react';
-import { useParams, useSearchParams, Link } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams, Link } from 'react-router-dom';
 
 import Api from './Api';
 import Visit from './Components/Visit';
@@ -8,7 +8,8 @@ import logo from './images/logo.png';
 
 function Sheet() {
   const { id } = useParams();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   let selectedProgramId = searchParams.get('programId');
   if (selectedProgramId) {
@@ -23,11 +24,11 @@ function Sheet() {
       Api.locations.get(id).then((response) => {
         setLocation(response.data);
         if (!selectedProgramId && response.data.Programs?.length) {
-          setSearchParams({ programId: response.data.Programs[0].id });
+          navigate(`?programId=${response.data.Programs[0].id}`, { replace: true });
         }
       });
     }
-  }, [id, location, selectedProgramId, setSearchParams]);
+  }, [id, location, selectedProgramId, navigate]);
 
   useEffect(() => {
     if (id && selectedProgramId) {
