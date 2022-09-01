@@ -1,28 +1,19 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 import Api from './Api';
-import { useAuthContext } from './AuthContext';
 
 function ProgramSheet() {
-  const { user } = useAuthContext();
-  const [programs, setPrograms] = useState([]); //item is what you put in []
+  const [programs, setPrograms] = useState([]);
 
   useEffect(function () {
-    const request = fetch('/api/program');
-    request
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setPrograms(data);
-      });
+    Api.programs.index().then((response) => {
+      setPrograms(response.data);
+    });
   }, []);
 
   return (
     <main className="container">
-      {/* <div className="row justify-content-center">
-        <div className="col col-sm-10 col-md-8 col-lg-6 col-xl-4"> */}
       <h1>Programs</h1>
       <Link to="/dashboard/programs/new" className="btn btn-primary">
         Add New Program
@@ -47,8 +38,6 @@ function ProgramSheet() {
           ))}
         </tbody>
       </table>
-      {/* </div>
-      </div> */}
     </main>
   );
 }

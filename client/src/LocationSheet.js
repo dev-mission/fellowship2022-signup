@@ -1,28 +1,29 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 import Api from './Api';
 import { useAuthContext } from './AuthContext';
 
 function LocationSheet() {
-  const { user } = useAuthContext();
-  const [locations, setLocations] = useState([]); //item is what you put in []
+  const [locations, setLocations] = useState([]);
+  const { setUser } = useAuthContext();
+  const navigate = useNavigate();
 
   useEffect(function () {
-    const request = fetch('/api/location');
-    request
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setLocations(data);
-      });
+    Api.locations.index().then((response) => {
+      setLocations(response.data);
+    });
   }, []);
+
+  async function onSetupTablet(event, locationId) {
+    event.preventDefault();
+    await Api.locations.setup(locationId);
+    setUser(null);
+    navigate(`/sheet/${locationId}`);
+  }
 
   return (
     <main className="container">
-      {/* <div className="row justify-content-center">
-        <div className="col col-sm-10 col-md-8 col-lg-6 col-xl-4"> */}
       <h1>Locations</h1>
       <Link to="/dashboard/locations/new" className="btn btn-primary">
         Add New Location
@@ -37,14 +38,13 @@ function LocationSheet() {
         </thead>
         <tbody>
           {locations.map((location) => (
-            <tr>
-              <td>{location.Name}</td> <td>{location.Address}</td>{' '}
+            <tr key={location.id}>
+              <td>{location.Name}</td>
+              <td>{location.Address}</td>
               <td>
-                <Link to={`/sheet`} className="btn btn-primary">
+                <a onClick={(event) => onSetupTablet(event, location.id)} href={`/sheet/${location.id}`} className="btn btn-primary me-3">
                   Set Up Tablet
-                </Link>
-              </td>
-              <td>
+                </a>
                 <Link to={`/dashboard/locations/${location.id}/edit`} className="btn btn-outline-primary">
                   Edit
                 </Link>
@@ -53,8 +53,6 @@ function LocationSheet() {
           ))}
         </tbody>
       </table>
-      {/* </div>
-      </div> */}
     </main>
   );
 }

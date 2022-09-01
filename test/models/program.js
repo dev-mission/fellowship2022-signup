@@ -1,23 +1,19 @@
 const assert = require('assert');
-const _ = require('lodash');
-const fs = require('fs-extra');
-const path = require('path');
-const { v4: uuid } = require('uuid');
 
 const helper = require('../helper');
 const models = require('../../models');
 
-describe('models.program', () => {
+describe('models.Program', () => {
   beforeEach(async () => {
-    await helper.loadFixtures(['program']);
+    await helper.loadFixtures(['programs']);
   });
 
   it('create a new program record', async () => {
-    let Program = models.Program.build({
+    const Program = models.Program.build({
       Name: 'Ben',
     });
     assert.deepStrictEqual(Program.id, null);
-    await Program.save(); //save to data base, id will generate after it save
+    await Program.save(); // save to data base, id will generate after it save
     assert(Program.id);
 
     assert.deepStrictEqual(Program.Name, 'Ben');

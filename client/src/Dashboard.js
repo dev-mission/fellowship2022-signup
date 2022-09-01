@@ -1,17 +1,9 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { useAuthContext } from './AuthContext';
 
 function Dashboard() {
   const { user } = useAuthContext();
-  const [program, setProgram] = useState([]);
-
-  useEffect(function () {
-    fetch('/api/program')
-      .then((response) => response.json())
-      .then((data) => setProgram(data));
-  }, []);
 
   return (
     <main className="container">

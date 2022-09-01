@@ -1,4 +1,3 @@
-// import LocationForm from './LocationForm';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
 import { AuthContextProvider, AuthProtected } from './AuthContext';
@@ -22,79 +21,85 @@ function App() {
   return (
     <AuthContextProvider>
       <Router>
-        <Header />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/sheet/:id/sign-in" element={<SignIn />} />
+          <Route path="/sheet/:id" element={<Sheet />} />
           <Route
-            path="/dashboard/locations/new"
+            path="/*"
             element={
-              <AuthProtected isAdminRequired={true}>
-                <LocationForm />
-              </AuthProtected>
-            }
-          />
-          <Route
-            path="/dashboard/programs/new"
-            element={
-              <AuthProtected isAdminRequired={true}>
-                <ProgramForm />
-              </AuthProtected>
-            }
-          />
-          <Route
-            path="/dashboard/locations"
-            element={
-              <AuthProtected isAdminRequired={true}>
-                <LocationSheet />
-              </AuthProtected>
-            }
-          />
-          <Route
-            path="/dashboard/locations/:id/edit"
-            element={
-              <AuthProtected isAdminRequired={true}>
-                <LocationForm />
-              </AuthProtected>
-            }
-          />
-          <Route
-            path="/dashboard/programs"
-            element={
-              <AuthProtected isAdminRequired={true}>
-                <ProgramSheet />
-              </AuthProtected>
-            }
-          />
-          <Route
-            path="/dashboard/programs/:id/edit"
-            element={
-              <AuthProtected isAdminRequired={true}>
-                <ProgramForm />
-              </AuthProtected>
-            }
-          />
-          <Route
-            path="/dashboard"
-            element={
-              <AuthProtected isAdminRequired={true}>
-                <Dashboard />
-              </AuthProtected>
-            }
-          />
-          {/* Kimon & Fatimah */}
-          <Route path="/sheet" element={<Sheet />} />
-
-          <Route path="/sheet/sign-in" element={<SignIn />} />
-
-          <Route path="/login" element={<Login />} />
-          <Route path="/passwords/*" element={<PasswordRoutes />} />
-          {process.env.REACT_APP_FEATURE_REGISTRATION === 'true' && <Route path="/register" element={<Register />} />}
-          <Route
-            path="/account/*"
-            element={
-              <AuthProtected>
-                <UserRoutes />
-              </AuthProtected>
+              <>
+                <Header />
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route
+                    path="/dashboard/locations/new"
+                    element={
+                      <AuthProtected isAdminRequired={true}>
+                        <LocationForm />
+                      </AuthProtected>
+                    }
+                  />
+                  <Route
+                    path="/dashboard/programs/new"
+                    element={
+                      <AuthProtected isAdminRequired={true}>
+                        <ProgramForm />
+                      </AuthProtected>
+                    }
+                  />
+                  <Route
+                    path="/dashboard/locations"
+                    element={
+                      <AuthProtected isAdminRequired={true}>
+                        <LocationSheet />
+                      </AuthProtected>
+                    }
+                  />
+                  <Route
+                    path="/dashboard/locations/:id/edit"
+                    element={
+                      <AuthProtected isAdminRequired={true}>
+                        <LocationForm />
+                      </AuthProtected>
+                    }
+                  />
+                  <Route
+                    path="/dashboard/programs"
+                    element={
+                      <AuthProtected isAdminRequired={true}>
+                        <ProgramSheet />
+                      </AuthProtected>
+                    }
+                  />
+                  <Route
+                    path="/dashboard/programs/:id/edit"
+                    element={
+                      <AuthProtected isAdminRequired={true}>
+                        <ProgramForm />
+                      </AuthProtected>
+                    }
+                  />
+                  <Route
+                    path="/dashboard"
+                    element={
+                      <AuthProtected isAdminRequired={true}>
+                        <Dashboard />
+                      </AuthProtected>
+                    }
+                  />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/passwords/*" element={<PasswordRoutes />} />
+                  {process.env.REACT_APP_FEATURE_REGISTRATION === 'true' && <Route path="/register" element={<Register />} />}
+                  <Route
+                    path="/account/*"
+                    element={
+                      <AuthProtected>
+                        <UserRoutes />
+                      </AuthProtected>
+                    }
+                  />
+                </Routes>
+              </>
             }
           />
         </Routes>

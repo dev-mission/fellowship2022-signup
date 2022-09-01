@@ -1,4 +1,3 @@
-'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Visits', {
@@ -22,9 +21,23 @@ module.exports = {
       },
       ProgramId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: {
+            tableName: 'Programs',
+          },
+          key: 'id',
+        },
       },
       LocationId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: {
+            tableName: 'Locations',
+          },
+          key: 'id',
+        },
       },
       TimeIn: {
         type: Sequelize.DATE,

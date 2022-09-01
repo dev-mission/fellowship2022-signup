@@ -1,31 +1,34 @@
 const assert = require('assert');
 const HttpStatus = require('http-status-codes');
-const _ = require('lodash');
 const session = require('supertest-session');
 
 const helper = require('../../helper');
 const app = require('../../../app');
 const models = require('../../../models');
 
-describe('/api/visit', () => {
+const sheetTokenCookie = [
+  'sheet-token=s%3A1.3ce6548f80ebbe78.12d56fab7ce15d5fed5a5803709a6d43f992105f26270eb2f43a07d07e81a099.0hO9cQm327ZVhBeKNIHrHDIo8wI%2BNJIBu584jVg3XEA; Path=/',
+];
+
+describe('/api/visits', () => {
   let testSession;
 
   beforeEach(async () => {
-    await helper.loadFixtures(['visits', 'users']);
+    await helper.loadFixtures(['programs', 'locations', 'visits', 'users']);
     testSession = session(app);
   });
 
   describe('GET /', () => {
-    it('returns a list of visits', async () => {
-      const response = await testSession.get('/api/visit').expect(HttpStatus.OK);
+    it('returns a list of Visits', async () => {
+      const response = await testSession.get('/api/visits').set('Cookie', sheetTokenCookie).expect(HttpStatus.OK);
       const visit = response.body;
       assert.deepStrictEqual(visit.length, 1);
     });
   });
 
   describe('GET /:id', () => {
-    it('returns one visit by id', async () => {
-      const response = await testSession.get('/api/visit/1').expect(HttpStatus.OK);
+    it('returns one Visit by id', async () => {
+      const response = await testSession.get('/api/visits/1').set('Cookie', sheetTokenCookie).expect(HttpStatus.OK);
       const visit = response.body; // all data coming back from server
       assert.deepStrictEqual(visit.FirstName, 'Kimon');
       assert.deepStrictEqual(visit.LastName, 'Monokandilos');
@@ -38,15 +41,16 @@ describe('/api/visit', () => {
     });
 
     it('returns NOT FOUND for an id not in the database', async () => {
-      await testSession.get('/api/visit/0').expect(HttpStatus.NOT_FOUND);
+      await testSession.get('/api/visit/0').set('Cookie', sheetTokenCookie).expect(HttpStatus.NOT_FOUND);
     });
   });
 
   describe('POST /', () => {
     it('creates a new visit', async () => {
-      const response = await testSession //testing sending to the server
-        .post('/api/visit')
+      const response = await testSession // testing sending to the server
+        .post('/api/visits')
         .set('Accept', 'application/json')
+        .set('Cookie', sheetTokenCookie)
         .send({
           FirstName: 'Kimon',
           LastName: 'Monokandilos',
@@ -57,7 +61,7 @@ describe('/api/visit', () => {
         })
         .expect(HttpStatus.CREATED);
 
-      const { id, FirstName, LastName, PhoneNumber, Temperature, ProgramId, LocationId, TimeIn, TimeOut } = response.body; //checking response of service is correct
+      const { id, FirstName, LastName, PhoneNumber, Temperature, ProgramId, LocationId, TimeIn, TimeOut } = response.body; // checking response of service is correct
       assert(id);
       assert.deepStrictEqual(FirstName, 'Kimon');
       assert.deepStrictEqual(LastName, 'Monokandilos');
@@ -68,7 +72,7 @@ describe('/api/visit', () => {
       assert(TimeIn);
       assert.deepStrictEqual(TimeOut, null);
 
-      const visit = await models.Visit.findByPk(id); //checking if it is found on data base
+      const visit = await models.Visit.findByPk(id); // checking if it is found on data base
       assert(visit);
       assert.deepStrictEqual(visit.FirstName, 'Kimon');
       assert.deepStrictEqual(visit.LastName, 'Monokandilos');
@@ -83,7 +87,11 @@ describe('/api/visit', () => {
 
   describe('PATCH /:id/sign-out', () => {
     it('sets the TimeOut on an existing visit', async () => {
-      const response = await testSession.patch('/api/visit/1/sign-out').set('Accept', 'application/json').expect(HttpStatus.OK);
+      const response = await testSession
+        .patch('/api/visits/1/sign-out')
+        .set('Accept', 'application/json')
+        .set('Cookie', sheetTokenCookie)
+        .expect(HttpStatus.OK);
 
       const { id, TimeOut } = response.body;
       assert.deepStrictEqual(id, 1);
@@ -98,8 +106,9 @@ describe('/api/visit', () => {
   describe('PATCH /:id', () => {
     it('updates an existing visit', async () => {
       const response = await testSession
-        .patch('/api/visit/1')
+        .patch('/api/visits/1')
         .set('Accept', 'application/json')
+        .set('Cookie', sheetTokenCookie)
         .send({
           FirstName: 'New',
           LastName: 'User',
@@ -108,7 +117,7 @@ describe('/api/visit', () => {
         })
         .expect(HttpStatus.OK);
 
-      const { id, FirstName, LastName, PhoneNumber, Temperature, ProgramId, LocationId, TimeIn, TimeOut } = response.body;
+      const { id, FirstName, LastName, PhoneNumber, Temperature } = response.body;
       assert.deepStrictEqual(id, 1);
       assert.deepStrictEqual(FirstName, 'New');
       assert.deepStrictEqual(LastName, 'User');
@@ -135,7 +144,7 @@ describe('/api/visit', () => {
 
     describe('DELETE /:id', () => {
       it('deletes an existing visit', async () => {
-        await testSession.delete('/api/visit/1').expect(HttpStatus.OK);
+        await testSession.delete('/api/visits/1').expect(HttpStatus.OK);
         const visit = await models.Visit.findByPk(1);
         assert.deepStrictEqual(visit, null);
       });

@@ -8,14 +8,25 @@ const helpers = require('../helpers');
 
 const router = express.Router();
 
-//http methods
+// http methods
 router.get('/', async (req, res) => {
-  const records = await models.Location.findAll();
+  const page = req.query.page || 1;
+  const { records, pages, total } = await models.Program.paginate({
+    page,
+    include: models.Location,
+    order: [
+      ['Name', 'ASC'],
+      ['id', 'ASC'],
+    ],
+  });
+  helpers.setPaginationHeaders(req, res, page, pages, total);
   res.json(records.map((r) => r.toJSON()));
 });
 
-router.get('/:id', async (req, res) => {
-  const record = await models.Location.findByPk(req.params.id);
+router.get('/:id', interceptors.requireAdmin, async (req, res) => {
+  const record = await models.Program.findByPk(req.params.id, {
+    include: models.Location,
+  });
   if (record) {
     res.json(record.toJSON());
   } else {
@@ -25,7 +36,11 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', interceptors.requireAdmin, async (req, res) => {
   try {
-    const record = await models.Location.create(_.pick(req.body, ['Name', 'Address']));
+    let record;
+    await models.sequelize.transaction(async (transaction) => {
+      record = await models.Program.create(_.pick(req.body, ['Name']));
+      await record.setLocations(req.body.LocationIds ?? [], { transaction });
+    });
     res.status(HttpStatus.CREATED).json(record.toJSON());
   } catch (error) {
     if (error.name === 'SequelizeValidationError') {
@@ -43,9 +58,10 @@ router.patch('/:id', interceptors.requireAdmin, async (req, res) => {
   try {
     let record;
     await models.sequelize.transaction(async (transaction) => {
-      record = await models.Location.findByPk(req.params.id, { transaction });
+      record = await models.Program.findByPk(req.params.id, { transaction });
       if (record) {
-        await record.update(_.pick(req.body, ['Name', 'Address']), { transaction }); //doing mutiple things on data base, and prevent something happen in the same time
+        await record.update(_.pick(req.body, ['Name']), { transaction }); // doing mutiple things on data base, and prevent something happen in the same time
+        await record.setLocations(req.body.LocationIds ?? [], { transaction });
       }
     });
     if (record) {
@@ -69,7 +85,7 @@ router.delete('/:id', interceptors.requireAdmin, async (req, res) => {
   try {
     let record;
     await models.sequelize.transaction(async (transaction) => {
-      record = await models.Location.findByPk(req.params.id, { transaction });
+      record = await models.Program.findByPk(req.params.id, { transaction });
       if (record) {
         await record.destroy({ transaction });
       }

@@ -38,57 +38,61 @@ const Api = {
   },
 
   visits: {
-    index() {
-      return instance.get('/api/visit');
+    index(params) {
+      const { programId, locationId } = params ?? {};
+      return instance.get('/api/visits', { params: { programId, locationId } });
     },
     get(id) {
-      return instance.get(`/api/visit/${id}`);
+      return instance.get(`/api/visits/${id}`);
     },
     create(data) {
-      return instance.post(`/api/visit`, data);
+      return instance.post(`/api/visits`, data);
     },
     update(id, data) {
-      return instance.patch(`/api/visit/${id}`, data);
+      return instance.patch(`/api/visits/${id}`, data);
     },
     signout(id) {
-      return instance.patch(`/api/visit/${id}/sign-out`);
+      return instance.patch(`/api/visits/${id}/sign-out`);
     },
     delete(id) {
-      return instance.delete(`/api/visit/${id}`);
+      return instance.delete(`/api/visits/${id}`);
     },
   },
   locations: {
     index() {
-      return instance.get('/api/location');
+      return instance.get('/api/locations');
     },
     get(id) {
-      return instance.get(`/api/location/${id}`);
+      return instance.get(`/api/locations/${id}`);
     },
     create(data) {
-      return instance.post('/api/location', data);
+      return instance.post('/api/locations', data);
+    },
+    setup(id) {
+      return instance.get(`/api/locations/${id}/setup`);
     },
     update(id, data) {
-      return instance.patch(`/api/location/${id}`, data);
+      return instance.patch(`/api/locations/${id}`, data);
     },
     delete(id) {
-      return instance.delete(`/api/location/${id}`);
+      return instance.delete(`/api/locations/${id}`);
     },
   },
-  program: {
+  programs: {
     index() {
-      return instance.get('/api/program');
+      return instance.get('/api/programs');
     },
     get(id) {
-      return instance.get(`/api/program/${id}`);
+      return instance.get(`/api/programs/${id}`);
     },
     create(data) {
-      return instance.post('/api/program', data);
+      return instance.post('/api/programs', data);
     },
     update(id, data) {
-      return instance.patch(`/api/program/${id}`, data);
+      return instance.patch(`/api/programs/${id}`, data);
     },
     delete(id) {
-      return instance.delete(`/api/program/${id}`);
+      return instance.delete(`/api/programs/${id}`);
     },
   },
   passwords: {

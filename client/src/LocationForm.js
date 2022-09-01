@@ -5,14 +5,21 @@ import Api from './Api';
 function LocationForm() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const [programs, setPrograms] = useState([]);
   const [data, setData] = useState({
     Name: '',
     Address: '',
+    ProgramIds: [],
   });
 
   useEffect(() => {
+    Api.programs.index().then((response) => setPrograms(response.data));
     if (id) {
-      Api.locations.get(id).then((response) => setData(response.data));
+      Api.locations.get(id).then((response) => {
+        const newData = { ...response.data };
+        newData.ProgramIds = newData.Programs.map((pro) => pro.id);
+        setData(newData);
+      });
     }
   }, [id]);
 
@@ -37,6 +44,19 @@ function LocationForm() {
     setData(newData);
   }
 
+  function updateAssociation(event) {
+    const newData = { ...data };
+    if (event.target.checked) {
+      newData[event.target.name].push(parseInt(event.target.value));
+    } else {
+      const index = newData[event.target.name].indexOf(parseInt(event.target.value));
+      if (index >= 0) {
+        newData[event.target.name].splice(index, 1);
+      }
+    }
+    setData(newData);
+  }
+
   return (
     <main className="container">
       <div className="row justify-content-center">
@@ -54,6 +74,27 @@ function LocationForm() {
                 Address
               </label>
               <input type="text" className="form-control" id="Address" name="Address" onChange={onChange} value={data.Address} />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Programs</label>
+              <div>
+                {programs?.map((pro) => (
+                  <div key={`loc-${pro.id}`} className="form-check">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id={`loc-${pro.id}`}
+                      name="ProgramIds"
+                      value={pro.id}
+                      onChange={updateAssociation}
+                      checked={data.ProgramIds.includes(pro.id)}
+                    />
+                    <div className="form-check-label" htmlFor={`loc-${pro.id}`}>
+                      {pro.Name}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
             <button type="submit" className="btn btn-primary">
               Submit

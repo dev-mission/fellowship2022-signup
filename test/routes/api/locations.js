@@ -1,37 +1,28 @@
 const assert = require('assert');
 const HttpStatus = require('http-status-codes');
-const _ = require('lodash');
 const session = require('supertest-session');
 
 const helper = require('../../helper');
 const app = require('../../../app');
 const models = require('../../../models');
 
-describe('/api/location', () => {
+describe('/api/locations', () => {
   let testSession;
 
   beforeEach(async () => {
-    await helper.loadFixtures(['location', 'users']);
+    await helper.loadFixtures(['locations', 'users']);
     testSession = session(app);
   });
 
-  describe('GET /', () => {
-    it('returns a list of locations', async () => {
-      const response = await testSession.get('/api/location').expect(HttpStatus.OK);
-      const location = response.body;
-      assert.deepStrictEqual(location.length, 2);
-    });
-  });
-
   describe('GET /:id', () => {
-    it('returns one location by id', async () => {
-      const response = await testSession.get('/api/location/1').expect(HttpStatus.OK);
+    it('returns one Location by id', async () => {
+      const response = await testSession.get('/api/locations/1').expect(HttpStatus.OK);
       const location = response.body; // all data coming back from server
       assert.deepStrictEqual(location.Name, 'Jose');
     });
 
     it('returns NOT FOUND for an id not in the database', async () => {
-      await testSession.get('/api/location/0').expect(HttpStatus.NOT_FOUND);
+      await testSession.get('/api/locations/0').expect(HttpStatus.NOT_FOUND);
     });
   });
 
@@ -44,10 +35,18 @@ describe('/api/location', () => {
         .expect(HttpStatus.OK);
     });
 
+    describe('GET /', () => {
+      it('returns a list of Locations', async () => {
+        const response = await testSession.get('/api/locations').expect(HttpStatus.OK);
+        const location = response.body;
+        assert.deepStrictEqual(location.length, 2);
+      });
+    });
+
     describe('POST /', () => {
-      it('creates a new location', async () => {
-        const response = await testSession //testing sending to the server
-          .post('/api/location')
+      it('creates a new Location', async () => {
+        const response = await testSession // testing sending to the server
+          .post('/api/locations')
           .set('Accept', 'application/json')
           .send({
             Name: 'Jose',
@@ -55,22 +54,30 @@ describe('/api/location', () => {
           })
           .expect(HttpStatus.CREATED);
 
-        const { id, Name, Address } = response.body; //checking response of service is correct
+        const { id, Name, Address } = response.body; // checking response of service is correct
         assert(id);
         assert.deepStrictEqual(Name, 'Jose');
         assert.deepStrictEqual(Address, '360 Valencia');
 
-        const location = await models.Location.findByPk(id); //checking if it is found on data base
+        const location = await models.Location.findByPk(id); // checking if it is found on data base
         assert(location);
         assert.deepStrictEqual(location.Name, 'Jose');
         assert.deepStrictEqual(location.Address, '360 Valencia');
       });
     });
 
+    describe('GET /:id/setup', () => {
+      it('returns an authentication token and logs out the admin user', async () => {
+        const response = await testSession.get('/api/locations/1/setup').expect(HttpStatus.OK);
+        assert(response.headers['set-cookie'].find((cookie) => cookie.startsWith('sheet-token=')));
+        await testSession.get('/api/locations/1/setup').expect(HttpStatus.UNAUTHORIZED);
+      });
+    });
+
     describe('PATCH /:id', () => {
-      it('updates an existing location', async () => {
+      it('updates an existing Location', async () => {
         const response = await testSession
-          .patch('/api/location/1')
+          .patch('/api/locations/1')
           .set('Accept', 'application/json')
           .send({
             Name: 'Jose',
@@ -91,8 +98,8 @@ describe('/api/location', () => {
     });
 
     describe('DELETE /:id', () => {
-      it('deletes an existing location', async () => {
-        await testSession.delete('/api/location/1').expect(HttpStatus.OK);
+      it('deletes an existing Location', async () => {
+        await testSession.delete('/api/locations/1').expect(HttpStatus.OK);
         const location = await models.Location.findByPk(1);
         assert.deepStrictEqual(location, null);
       });

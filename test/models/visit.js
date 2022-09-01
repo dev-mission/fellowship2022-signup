@@ -1,19 +1,15 @@
 const assert = require('assert');
-const _ = require('lodash');
-const fs = require('fs-extra');
-const path = require('path');
-const { v4: uuid } = require('uuid');
 
 const helper = require('../helper');
 const models = require('../../models');
 
-describe('models.visit', () => {
+describe('models.Visit', () => {
   beforeEach(async () => {
-    await helper.loadFixtures(['visits']);
+    await helper.loadFixtures(['programs', 'locations', 'visits']);
   });
 
   it('create a new visit record', async () => {
-    let Visit = models.Visit.build({
+    const Visit = models.Visit.build({
       FirstName: 'Kimon',
       LastName: 'Monokandilos',
       PhoneNumber: '4155276516',
@@ -24,7 +20,7 @@ describe('models.visit', () => {
       TimeOut: '2022-08-15T02:07:24+0000',
     });
     assert.deepStrictEqual(Visit.id, null);
-    await Visit.save(); //save to data base, id will generate after it save
+    await Visit.save(); // save to data base, id will generate after it save
     assert(Visit.id);
 
     assert.deepStrictEqual(Visit.FirstName, 'Kimon');
