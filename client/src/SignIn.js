@@ -26,7 +26,7 @@ function SignIn() {
     event.preventDefault();
     try {
       await Api.visits.create(data);
-      navigate(`/sheet/${id}?programId=${data.ProgramId}`);
+      navigate(`/sheet/${id}?programId=${data.ProgramId}`, { replace: true });
     } catch (error) {
       console.log(error);
     }
