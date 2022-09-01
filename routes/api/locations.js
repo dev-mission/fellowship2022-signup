@@ -16,6 +16,7 @@ router.get('/', interceptors.requireAdmin, async (req, res) => {
     page,
     include: models.Program,
     order: [
+      [models.Program, 'Name', 'Asc'],
       ['Name', 'ASC'],
       ['id', 'ASC'],
     ],
@@ -40,6 +41,7 @@ router.get('/:id/setup', interceptors.requireAdmin, async (req, res) => {
 router.get('/:id', async (req, res) => {
   const record = await models.Location.findByPk(req.params.id, {
     include: models.Program,
+    order: [[models.Program, 'Name', 'Asc']],
   });
   if (record) {
     res.json(record.toJSON());
