@@ -15,6 +15,16 @@ const routes = require('./routes');
 
 const app = express();
 
+/// redirect production requests to https
+if (process.env.NODE_ENV === 'production') {
+  app.use((req, res, next) => {
+    if (req.secure) {
+      next();
+    } else {
+      res.redirect(`https://${req.headers.host}${req.url}`);
+    }
+  });
+}
 /// router logging output
 if (process.env.NODE_ENV !== 'test') {
   app.use(logger('dev'));
