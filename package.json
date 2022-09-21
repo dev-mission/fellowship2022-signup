@@ -1,6 +1,6 @@
 {
-  "name": "app",
-  "version": "0.0.0",
+  "name": "fellowship2022-signup",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "heroku-postbuild": "cd client && npm install && npm run build",

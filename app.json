@@ -1,8 +1,8 @@
 {
-  "name": "Full Stack Starter",
-  "description": "This starter codebase includes a React SPA client and a Node/Express RESTful API endpoint that uses a Postgres SQL database.",
+  "name": "SignMe",
+  "description": "This web app implements a digital sign-in sheet.",
   "website": "https://devmission.org/",
-  "repository": "https://github.com/dev-mission/full-stack-starter/",
+  "repository": "https://github.com/dev-mission/fellowship2022-signup/",
   "logo": "https://devmission.org/wp-content/uploads/2017/04/cropped-Dev-Mission-Icon-JPG-270x270.jpg",
   "scripts": {
     "postdeploy": "sequelize db:migrate; if [ -d seeders ]; then sequelize db:seed:all; fi"
@@ -14,7 +14,7 @@
     },
     "REACT_APP_SITE_TITLE": {
       "description": "The title of the website that will appear in the browser tab",
-      "value": "Full Stack Starter"
+      "value": "SignMe"
     },
     "SESSION_SECRET": {
       "description": "A secret key for verifying the integrity of signed cookies.",
