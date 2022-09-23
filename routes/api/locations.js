@@ -31,7 +31,7 @@ router.get('/:id/setup', interceptors.requireAdmin, async (req, res) => {
     req.logout();
     const nonce = crypto.randomBytes(8).toString('hex');
     const hash = crypto.createHash('sha256', process.env.SESSION_SECRET).update(`${record.id}`).update(nonce).digest('hex');
-    res.cookie('sheet-token', `${record.id}.${nonce}.${hash}`, { signed: true });
+    res.cookie('sheet-token', `${record.id}.${nonce}.${hash}`, { signed: true, maxAge: 31556952000 /* 1 yr in ms */ });
     res.status(HttpStatus.OK).end();
   } else {
     res.status(HttpStatus.NOT_FOUND).end();
