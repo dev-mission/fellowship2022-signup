@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import classNames from 'classnames';
 
 import './Header.scss';
 import brand from './images/brand.png';
@@ -9,6 +10,7 @@ import { useAuthContext } from './AuthContext';
 function Header() {
   const navigate = useNavigate();
   const { user, setUser } = useAuthContext();
+  const [isOpen, setOpen] = useState(false);
 
   useEffect(
     function () {
@@ -31,48 +33,41 @@ function Header() {
   }
 
   return (
-    <nav className="header navbar navbar-expand-md navbar-light bg-light fixed-top">
+    <nav className="header navbar navbar-expand-lg navbar-light bg-light fixed-top">
       <div className="container">
         <Link className="navbar-brand d-flex" to="/">
           <img src={brand} alt="" width="30" height="30" className="me-1" />
           SignMe
         </Link>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarsExampleDefault"
-          aria-controls="navbarsExampleDefault"
-          aria-expanded="false"
-          aria-label="Toggle navigation">
+        <button onClick={() => setOpen(!isOpen)} className="navbar-toggler" type="button" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div className="collapse navbar-collapse" id="navbarsExampleDefault">
+        <div className={classNames('collapse navbar-collapse', { show: isOpen })}>
           <ul className="navbar-nav flex-grow-1 mb-2 mb-md-0">
             <li className="nav-item active">
-              <Link className="nav-link" aria-current="page" to="/">
+              <Link onClick={() => setOpen(false)} className="nav-link" aria-current="page" to="/">
                 Home
               </Link>
             </li>
             {user && (
               <>
                 <li className="nav-item active">
-                  <Link className="nav-link" aria-current="page" to="/dashboard">
+                  <Link onClick={() => setOpen(false)} className="nav-link" aria-current="page" to="/dashboard">
                     Dashboard
                   </Link>
                 </li>
                 <li className="nav-item active">
-                  <Link className="nav-link" aria-current="page" to="/dashboard/locations">
+                  <Link onClick={() => setOpen(false)} className="nav-link" aria-current="page" to="/dashboard/locations">
                     Locations
                   </Link>
                 </li>
                 <li className="nav-item active">
-                  <Link className="nav-link" aria-current="page" to="/dashboard/programs">
+                  <Link onClick={() => setOpen(false)} className="nav-link" aria-current="page" to="/dashboard/programs">
                     Programs
                   </Link>
                 </li>
                 <li className="nav-item active">
-                  <Link className="nav-link" aria-current="page" to="#">
+                  <Link onClick={() => setOpen(false)} className="nav-link" aria-current="page" to="#">
                     Reports
                   </Link>
                 </li>
@@ -83,7 +78,10 @@ function Header() {
                 <>
                   <li className="nav-item me-3">
                     <span className="nav-link d-inline-block">
-                      Hello, <Link to="/account">{user.firstName}!</Link>
+                      Hello,{' '}
+                      <Link onClick={() => setOpen(false)} to="/account">
+                        {user.firstName}!
+                      </Link>
                     </span>
                     {user.pictureUrl && <div className="header__picture" style={{ backgroundImage: `url(${user.pictureUrl})` }}></div>}
                   </li>
@@ -96,7 +94,7 @@ function Header() {
               )}
               {!user && (
                 <li className="nav-item">
-                  <Link className="nav-link" to="/login">
+                  <Link onClick={() => setOpen(false)} className="nav-link" to="/login">
                     Log in
                   </Link>
                 </li>

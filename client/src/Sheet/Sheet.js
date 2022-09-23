@@ -48,13 +48,13 @@ function Sheet() {
   }
 
   return (
-    <main className="container sheet">
-      <div className="d-flex align-items-bottom mb-5">
-        <h2 className="d-flex align-items-center mb-0 pe-3 sheet__header">
+    <main className="container-fluid sheet">
+      <div className="d-flex align-items-bottom mb-5 sheet__header">
+        <h2 className="d-flex align-items-center pe-3 sheet__brand">
           <img src={brand} alt="SignMe Logo" width="48" height="48" className="me-2" />
           SignMe in for:
         </h2>
-        <ul className="nav nav-tabs flex-grow-1">
+        <ul className="nav nav-tabs sheet__tabs">
           {location?.Programs.map((program) => (
             <li key={`program-${program.id}`} className="nav-item">
               <Link to={`?programId=${program.id}`} className={classNames('nav-link', { active: selectedProgramId === program.id })}>
