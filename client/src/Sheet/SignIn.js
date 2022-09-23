@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import Cleave from 'cleave.js/react';
+import 'cleave.js/dist/addons/cleave-phone.us';
 
 import Api from '../Api';
 
@@ -39,7 +41,11 @@ function SignIn() {
 
   function onChange(event) {
     const newData = { ...data };
-    newData[event.target.name] = event.target.value;
+    if (event.target.rawValue) {
+      newData[event.target.name] = event.target.rawValue;
+    } else {
+      newData[event.target.name] = event.target.value;
+    }
     setData(newData);
   }
 
@@ -57,7 +63,8 @@ function SignIn() {
                       <label className="form-label" htmlFor="PhoneNumber">
                         Phone Number
                       </label>
-                      <input
+                      <Cleave
+                        options={{ delimiter: '-', phone: true, phoneRegionCode: 'US' }}
                         autoFocus={true}
                         type="tel"
                         inputMode="tel"
