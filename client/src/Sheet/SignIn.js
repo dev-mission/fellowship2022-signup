@@ -51,43 +51,65 @@ function SignIn() {
             <div className="card-body">
               <h2 className="card-title">Sign In</h2>
               <form onSubmit={onSubmit}>
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="PhoneNumber">
-                    Phone Number
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="PhoneNumber"
-                    name="PhoneNumber"
-                    onChange={onChange}
-                    value={data.PhoneNumber}
-                  />
+                <div className="row g-3">
+                  <div className="col-sm-6">
+                    <div className="mb-3">
+                      <label className="form-label" htmlFor="PhoneNumber">
+                        Phone Number
+                      </label>
+                      <input
+                        autoFocus={true}
+                        type="tel"
+                        inputMode="tel"
+                        className="form-control"
+                        id="PhoneNumber"
+                        name="PhoneNumber"
+                        onChange={onChange}
+                        value={data.PhoneNumber}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-sm-6">
+                    <div className="mb-3">
+                      <label className="form-label" htmlFor="Temperature">
+                        Temperature
+                      </label>
+                      <input
+                        type="text"
+                        inputMode="decimal"
+                        className="form-control"
+                        id="Temperature"
+                        name="Temperature"
+                        onChange={onChange}
+                        value={data.Temperature}
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="FirstName">
-                    First Name
-                  </label>
-                  <input type="text" className="form-control" id="FirstName" name="FirstName" onChange={onChange} value={data.FirstName} />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="LastName">
-                    Last Name
-                  </label>
-                  <input type="text" className="form-control" id="LastName" name="LastName" onChange={onChange} value={data.LastName} />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="Temperature">
-                    Temperature
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="Temperature"
-                    name="Temperature"
-                    onChange={onChange}
-                    value={data.Temperature}
-                  />
+                <div className="row g-3">
+                  <div className="col-sm-6">
+                    <div className="mb-3">
+                      <label className="form-label" htmlFor="FirstName">
+                        First Name
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="FirstName"
+                        name="FirstName"
+                        onChange={onChange}
+                        value={data.FirstName}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-sm-6">
+                    <div className="mb-3">
+                      <label className="form-label" htmlFor="LastName">
+                        Last Name
+                      </label>
+                      <input type="text" className="form-control" id="LastName" name="LastName" onChange={onChange} value={data.LastName} />
+                    </div>
+                  </div>
                 </div>
                 <div className="mb-3">
                   <label className="form-label" htmlFor="Temperature">
