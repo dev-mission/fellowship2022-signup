@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import classNames from 'classnames';
 import Cleave from 'cleave.js/react';
@@ -22,6 +22,7 @@ function SignIn() {
   const [isDisabled, setDisabled] = useState(false);
   const [isValid, setValid] = useState(false);
   const [showValidation, setShowValidation] = useState(false);
+  const inputRefs = useRef([]);
 
   useEffect(() => {
     if (id) {
@@ -49,6 +50,18 @@ function SignIn() {
 
   function onCancel() {
     navigate(-1);
+  }
+
+  function onKeyDown(event, nextIndex) {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      event.stopPropagation();
+      if (nextIndex !== undefined) {
+        setTimeout(() => inputRefs.current[nextIndex].focus(), 0);
+      } else {
+        event.target.blur();
+      }
+    }
   }
 
   function onChange(event) {
@@ -101,6 +114,8 @@ function SignIn() {
                         id="PhoneNumber"
                         name="PhoneNumber"
                         onChange={onChange}
+                        onKeyDown={(event) => onKeyDown(event, 0)}
+                        enterKeyHint="next"
                         value={data.PhoneNumber}
                       />
                       <div className="invalid-feedback">This is required!</div>
@@ -112,12 +127,15 @@ function SignIn() {
                         Temperature
                       </label>
                       <input
+                        ref={(el) => (inputRefs.current[0] = el)}
                         type="text"
                         inputMode="decimal"
                         className={classNames('form-control', { 'is-invalid': showValidation && !isTemperatureValid(data) })}
                         id="Temperature"
                         name="Temperature"
                         onChange={onChange}
+                        onKeyDown={(event) => onKeyDown(event, 1)}
+                        enterKeyHint="next"
                         value={data.Temperature}
                       />
                       <div className="invalid-feedback">This is required!</div>
@@ -131,11 +149,15 @@ function SignIn() {
                         First Name
                       </label>
                       <input
+                        ref={(el) => (inputRefs.current[1] = el)}
                         type="text"
+                        autoCapitalize="words"
                         className={classNames('form-control', { 'is-invalid': showValidation && !isFirstNameValid(data) })}
                         id="FirstName"
                         name="FirstName"
                         onChange={onChange}
+                        onKeyDown={(event) => onKeyDown(event, 2)}
+                        enterKeyHint="next"
                         value={data.FirstName}
                       />
                       <div className="invalid-feedback">This is required!</div>
@@ -147,11 +169,15 @@ function SignIn() {
                         Last Name
                       </label>
                       <input
+                        ref={(el) => (inputRefs.current[2] = el)}
                         type="text"
+                        autoCapitalize="words"
                         className={classNames('form-control', { 'is-invalid': showValidation && !isLastNameValid(data) })}
                         id="LastName"
                         name="LastName"
                         onChange={onChange}
+                        onKeyDown={onKeyDown}
+                        enterKeyHint="done"
                         value={data.LastName}
                       />
                       <div className="invalid-feedback">This is required!</div>
