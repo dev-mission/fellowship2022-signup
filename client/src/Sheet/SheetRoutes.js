@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 
 import Sheet from './Sheet';
+import SheetRedirect from './SheetRedirect';
 import SignIn from './SignIn';
 
 function SheetRoutes() {
@@ -8,6 +9,7 @@ function SheetRoutes() {
     <Routes>
       <Route path=":id/sign-in" element={<SignIn />} />
       <Route path=":id" element={<Sheet />} />
+      <Route path="" element={<SheetRedirect />} />
     </Routes>
   );
 }

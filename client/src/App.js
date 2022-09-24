@@ -1,4 +1,5 @@
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { CookiesProvider } from 'react-cookie';
 
 import { AuthContextProvider, AuthProtected } from './AuthContext';
 import Header from './Header';
@@ -14,43 +15,45 @@ import './App.scss';
 
 function App() {
   return (
-    <AuthContextProvider>
-      <Router>
-        <Routes>
-          <Route path="/sheet/*" element={<SheetRoutes />} />
-          <Route
-            path="/*"
-            element={
-              <>
-                <Header />
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/passwords/*" element={<PasswordRoutes />} />
-                  {process.env.REACT_APP_FEATURE_REGISTRATION === 'true' && <Route path="/register" element={<Register />} />}
-                  <Route
-                    path="/account/*"
-                    element={
-                      <AuthProtected>
-                        <UserRoutes />
-                      </AuthProtected>
-                    }
-                  />
-                  <Route
-                    path="/dashboard/*"
-                    element={
-                      <AuthProtected isAdminRequired={true}>
-                        <DashboardRoutes />
-                      </AuthProtected>
-                    }
-                  />
-                </Routes>
-              </>
-            }
-          />
-        </Routes>
-      </Router>
-    </AuthContextProvider>
+    <CookiesProvider>
+      <AuthContextProvider>
+        <Router>
+          <Routes>
+            <Route path="/sheet/*" element={<SheetRoutes />} />
+            <Route
+              path="/*"
+              element={
+                <>
+                  <Header />
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/passwords/*" element={<PasswordRoutes />} />
+                    {process.env.REACT_APP_FEATURE_REGISTRATION === 'true' && <Route path="/register" element={<Register />} />}
+                    <Route
+                      path="/account/*"
+                      element={
+                        <AuthProtected>
+                          <UserRoutes />
+                        </AuthProtected>
+                      }
+                    />
+                    <Route
+                      path="/dashboard/*"
+                      element={
+                        <AuthProtected isAdminRequired={true}>
+                          <DashboardRoutes />
+                        </AuthProtected>
+                      }
+                    />
+                  </Routes>
+                </>
+              }
+            />
+          </Routes>
+        </Router>
+      </AuthContextProvider>
+    </CookiesProvider>
   );
 }
 
