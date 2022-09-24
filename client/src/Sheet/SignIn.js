@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import classNames from 'classnames';
 import Cleave from 'cleave.js/react';
 import 'cleave.js/dist/addons/cleave-phone.us';
 
@@ -18,6 +19,9 @@ function SignIn() {
     LocationId: id,
     ProgramId: searchParams.get('programId'),
   });
+  const [isDisabled, setDisabled] = useState(false);
+  const [isValid, setValid] = useState(false);
+  const [showValidation, setShowValidation] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -27,11 +31,19 @@ function SignIn() {
 
   async function onSubmit(event) {
     event.preventDefault();
+    event.stopPropagation();
+    if (!isValid) {
+      setShowValidation(true);
+      return;
+    }
+    setDisabled(true);
     try {
       await Api.visits.create(data);
       navigate(`/sheet/${id}?programId=${data.ProgramId}`, { replace: true });
     } catch (error) {
       console.log(error);
+    } finally {
+      setDisabled(false);
     }
   }
 
@@ -47,6 +59,23 @@ function SignIn() {
       newData[event.target.name] = event.target.value;
     }
     setData(newData);
+    setValid(isPhoneNumberValid(newData) && isTemperatureValid(newData) && isFirstNameValid(newData) && isLastNameValid(newData));
+  }
+
+  function isPhoneNumberValid(data) {
+    return data.PhoneNumber.match(/^\d{10}$/);
+  }
+
+  function isTemperatureValid(data) {
+    return data.Temperature.match(/^\d+(\.\d+)?$/);
+  }
+
+  function isFirstNameValid(data) {
+    return data.FirstName !== '';
+  }
+
+  function isLastNameValid(data) {
+    return data.LastName !== '';
   }
 
   return (
@@ -56,7 +85,7 @@ function SignIn() {
           <div className="card">
             <div className="card-body">
               <h2 className="card-title">Sign In</h2>
-              <form onSubmit={onSubmit}>
+              <form onSubmit={onSubmit} disabled={isDisabled} noValidate={true}>
                 <div className="row g-3">
                   <div className="col-sm-6">
                     <div className="mb-3">
@@ -68,12 +97,13 @@ function SignIn() {
                         autoFocus={true}
                         type="tel"
                         inputMode="tel"
-                        className="form-control"
+                        className={classNames('form-control', { 'is-invalid': showValidation && !isPhoneNumberValid(data) })}
                         id="PhoneNumber"
                         name="PhoneNumber"
                         onChange={onChange}
                         value={data.PhoneNumber}
                       />
+                      <div className="invalid-feedback">This is required!</div>
                     </div>
                   </div>
                   <div className="col-sm-6">
@@ -84,12 +114,13 @@ function SignIn() {
                       <input
                         type="text"
                         inputMode="decimal"
-                        className="form-control"
+                        className={classNames('form-control', { 'is-invalid': showValidation && !isTemperatureValid(data) })}
                         id="Temperature"
                         name="Temperature"
                         onChange={onChange}
                         value={data.Temperature}
                       />
+                      <div className="invalid-feedback">This is required!</div>
                     </div>
                   </div>
                 </div>
@@ -101,12 +132,13 @@ function SignIn() {
                       </label>
                       <input
                         type="text"
-                        className="form-control"
+                        className={classNames('form-control', { 'is-invalid': showValidation && !isFirstNameValid(data) })}
                         id="FirstName"
                         name="FirstName"
                         onChange={onChange}
                         value={data.FirstName}
                       />
+                      <div className="invalid-feedback">This is required!</div>
                     </div>
                   </div>
                   <div className="col-sm-6">
@@ -114,14 +146,20 @@ function SignIn() {
                       <label className="form-label" htmlFor="LastName">
                         Last Name
                       </label>
-                      <input type="text" className="form-control" id="LastName" name="LastName" onChange={onChange} value={data.LastName} />
+                      <input
+                        type="text"
+                        className={classNames('form-control', { 'is-invalid': showValidation && !isLastNameValid(data) })}
+                        id="LastName"
+                        name="LastName"
+                        onChange={onChange}
+                        value={data.LastName}
+                      />
+                      <div className="invalid-feedback">This is required!</div>
                     </div>
                   </div>
                 </div>
                 <div className="mb-3">
-                  <label className="form-label" htmlFor="Temperature">
-                    I'm here for:
-                  </label>
+                  <label className="form-label">I'm here for:</label>
                   {location?.Programs.map((program) => (
                     <div key={`program-${program.id}`} className="form-check">
                       <input

@@ -28,7 +28,7 @@ function LocationForm() {
           if (newPrograms.length > 0) {
             // reorder the programs list
             for (const program of allPrograms) {
-              if (!newPrograms.find((p) => p.id == program.id)) {
+              if (!newPrograms.find((p) => p.id === program.id)) {
                 newPrograms.push(program);
               }
             }
