@@ -52,7 +52,7 @@
   }
 }
 
-@include media-breakpoint-down(md) {
+@include media-breakpoint-down(lg) {
   .sheet__brand {
     border-bottom: 0;
     margin-bottom: 1rem;
