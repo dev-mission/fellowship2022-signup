@@ -10,7 +10,7 @@ describe('/api/locations', () => {
   let testSession;
 
   beforeEach(async () => {
-    await helper.loadFixtures(['locations', 'users']);
+    await helper.loadFixtures(['locations', 'programs', 'users']);
     testSession = session(app);
   });
 
@@ -80,20 +80,28 @@ describe('/api/locations', () => {
           .patch('/api/locations/1')
           .set('Accept', 'application/json')
           .send({
-            Name: 'Jose',
-            Address: '360 Valencia',
+            Name: 'HQ',
+            Address: '360 Valencia St.',
+            ProgramIds: [2, 1],
           })
           .expect(HttpStatus.OK);
 
         const { id, Name, Address } = response.body;
         assert.deepStrictEqual(id, 1);
-        assert.deepStrictEqual(Name, 'Jose');
-        assert.deepStrictEqual(Address, '360 Valencia');
+        assert.deepStrictEqual(Name, 'HQ');
+        assert.deepStrictEqual(Address, '360 Valencia St.');
 
         const location = await models.Location.findByPk(id);
         assert(location);
-        assert.deepStrictEqual(location.Name, 'Jose');
-        assert.deepStrictEqual(location.Address, '360 Valencia');
+        assert.deepStrictEqual(location.Name, 'HQ');
+        assert.deepStrictEqual(location.Address, '360 Valencia St.');
+
+        const joins = await location.getProgramLocations({ order: [['position', 'ASC']] });
+        assert.deepStrictEqual(joins.length, 2);
+        assert.deepStrictEqual(joins[0].ProgramId, 2);
+        assert.deepStrictEqual(joins[0].position, 1);
+        assert.deepStrictEqual(joins[1].ProgramId, 1);
+        assert.deepStrictEqual(joins[1].position, 2);
       });
     });
 

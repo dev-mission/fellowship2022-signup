@@ -35,7 +35,7 @@ describe('/api/programs', () => {
       it('returns one Program by id', async () => {
         const response = await testSession.get('/api/programs/1').expect(HttpStatus.OK);
         const program = response.body; // all data coming back from server
-        assert.deepStrictEqual(program.Name, 'Jose');
+        assert.deepStrictEqual(program.Name, 'Pre-Apprenticeship Bootcamp');
       });
 
       it('returns NOT FOUND for an id not in the database', async () => {

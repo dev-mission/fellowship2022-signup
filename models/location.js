@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Location.hasMany(models.ProgramLocation);
       Location.belongsToMany(models.Program, { through: models.ProgramLocation });
     }
   }

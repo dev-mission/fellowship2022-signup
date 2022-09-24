@@ -21,6 +21,9 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
+      position: {
+        type: DataTypes.INTEGER,
+      },
     },
     {
       sequelize,

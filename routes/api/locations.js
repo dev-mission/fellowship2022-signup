@@ -41,11 +41,14 @@ router.get('/:id/setup', interceptors.requireAdmin, async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   const record = await models.Location.findByPk(req.params.id, {
-    include: models.Program,
-    order: [[models.Program, 'Name', 'Asc']],
+    include: [{ model: models.ProgramLocation, include: models.Program }],
+    order: [[models.ProgramLocation, 'position', 'ASC']],
   });
   if (record) {
-    res.json(record.toJSON());
+    const json = record.toJSON();
+    json.Programs = json.ProgramLocations.map((pl) => pl.Program);
+    delete json.ProgramLocations;
+    res.json(json);
   } else {
     res.status(HttpStatus.NOT_FOUND).end();
   }
@@ -78,7 +81,13 @@ router.patch('/:id', interceptors.requireAdmin, async (req, res) => {
       record = await models.Location.findByPk(req.params.id, { transaction });
       if (record) {
         await record.update(_.pick(req.body, ['Name', 'Address']), { transaction }); // doing mutiple things on data base, and prevent something happen in the same time
-        await record.setPrograms(req.body.ProgramIds ?? [], { transaction });
+        const programIds = req.body.ProgramIds ?? [];
+        await record.setPrograms(programIds, { transaction });
+        const joins = await record.getProgramLocations({ transaction });
+        joins.forEach((join) => {
+          join.position = programIds.indexOf(join.ProgramId) + 1;
+        });
+        await Promise.all(joins.map((j) => j.save({ transaction })));
       }
     });
     if (record) {

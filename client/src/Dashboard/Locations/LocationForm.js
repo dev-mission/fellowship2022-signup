@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { ReactSortable } from 'react-sortablejs';
 
 import Api from '../../Api';
 
@@ -14,14 +15,28 @@ function LocationForm() {
   });
 
   useEffect(() => {
-    Api.programs.index().then((response) => setPrograms(response.data));
-    if (id) {
-      Api.locations.get(id).then((response) => {
-        const newData = { ...response.data };
-        newData.ProgramIds = newData.Programs.map((pro) => pro.id);
-        setData(newData);
-      });
-    }
+    Api.programs.index().then((response) => {
+      const allPrograms = response.data;
+      setPrograms(allPrograms);
+      if (id) {
+        Api.locations.get(id).then((response) => {
+          const newData = { ...response.data };
+          const newPrograms = response.data.Programs;
+          newData.ProgramIds = newPrograms.map((pro) => pro.id);
+          delete newData.Programs;
+          setData(newData);
+          if (newPrograms.length > 0) {
+            // reorder the programs list
+            for (const program of allPrograms) {
+              if (!newPrograms.find((p) => p.id == program.id)) {
+                newPrograms.push(program);
+              }
+            }
+            setPrograms(newPrograms);
+          }
+        });
+      }
+    });
   }, [id]);
 
   async function onSubmit(event) {
@@ -45,9 +60,10 @@ function LocationForm() {
   }
 
   function updateAssociation(event) {
-    const newData = { ...data };
+    let newData = { ...data };
     if (event.target.checked) {
       newData[event.target.name].push(parseInt(event.target.value));
+      newData = reorderProgramIds(newData, programs);
     } else {
       const index = newData[event.target.name].indexOf(parseInt(event.target.value));
       if (index >= 0) {
@@ -55,6 +71,22 @@ function LocationForm() {
       }
     }
     setData(newData);
+  }
+
+  function reorderPrograms(newPrograms) {
+    setPrograms(newPrograms);
+    setData(reorderProgramIds(data, newPrograms));
+  }
+
+  function reorderProgramIds(oldData, newPrograms) {
+    const newData = { ...oldData };
+    newData.ProgramIds = [];
+    for (const program of newPrograms) {
+      if (oldData.ProgramIds.includes(program.id)) {
+        newData.ProgramIds.push(program.id);
+      }
+    }
+    return newData;
   }
 
   return (
@@ -77,24 +109,26 @@ function LocationForm() {
             </div>
             <div className="mb-3">
               <label className="form-label">Programs</label>
-              <div>
-                {programs?.map((pro) => (
-                  <div key={`loc-${pro.id}`} className="form-check">
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      id={`loc-${pro.id}`}
-                      name="ProgramIds"
-                      value={pro.id}
-                      onChange={updateAssociation}
-                      checked={data.ProgramIds.includes(pro.id)}
-                    />
-                    <div className="form-check-label" htmlFor={`loc-${pro.id}`}>
-                      {pro.Name}
+              {programs && (
+                <ReactSortable list={programs} setList={reorderPrograms}>
+                  {programs.map((pro) => (
+                    <div key={`loc-${pro.id}`} className="form-check">
+                      <input
+                        type="checkbox"
+                        className="form-check-input"
+                        id={`loc-${pro.id}`}
+                        name="ProgramIds"
+                        value={pro.id}
+                        onChange={updateAssociation}
+                        checked={data.ProgramIds.includes(pro.id)}
+                      />
+                      <div className="form-check-label" htmlFor={`loc-${pro.id}`}>
+                        {pro.Name}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </ReactSortable>
+              )}
             </div>
             <button type="submit" className="btn btn-primary">
               Submit

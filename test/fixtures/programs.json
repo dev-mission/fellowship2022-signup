@@ -3,14 +3,14 @@
     "model": "Program",
     "data": {
       "id": 1,
-      "Name": "Jose"
+      "Name": "Pre-Apprenticeship Bootcamp"
     }
   },
   {
     "model": "Program",
     "data": {
       "id": 2,
-      "Name": "Kimon"
+      "Name": "Staff"
     }
   }
 ]
