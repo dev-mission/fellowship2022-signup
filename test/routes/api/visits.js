@@ -26,6 +26,21 @@ describe('/api/visits', () => {
     });
   });
 
+  describe('GET /search', () => {
+    it('returns the name of the last visit with the phone number', async () => {
+      const response = await testSession
+        .get('/api/visits/search?phoneNumber=4155276516')
+        .set('Cookie', sheetTokenCookie)
+        .expect(HttpStatus.OK);
+      assert.deepStrictEqual(response.body.FirstName, 'Kimon');
+      assert.deepStrictEqual(response.body.LastName, 'Monokandilos');
+    });
+
+    it('returns NOT FOUND for no matching phone number', async () => {
+      await testSession.get('/api/visits/search?phoneNumber=4155551234').set('Cookie', sheetTokenCookie).expect(HttpStatus.NOT_FOUND);
+    });
+  });
+
   describe('GET /:id', () => {
     it('returns one Visit by id', async () => {
       const response = await testSession.get('/api/visits/1').set('Cookie', sheetTokenCookie).expect(HttpStatus.OK);

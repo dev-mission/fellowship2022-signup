@@ -5,6 +5,7 @@ import Cleave from 'cleave.js/react';
 import 'cleave.js/dist/addons/cleave-phone.us';
 
 import Api from '../Api';
+import './SignIn.scss';
 
 function SignIn() {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ function SignIn() {
   const [isValid, setValid] = useState(false);
   const [showValidation, setShowValidation] = useState(false);
   const inputRefs = useRef([]);
+  const [isCheckingPhoneNumber, setCheckingPhoneNumber] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -64,15 +66,38 @@ function SignIn() {
     }
   }
 
-  function onChange(event) {
+  async function onChange(event) {
     const newData = { ...data };
     if (event.target.rawValue) {
       newData[event.target.name] = event.target.rawValue;
     } else {
       newData[event.target.name] = event.target.value;
     }
+    if (event.target.name === 'PhoneNumber' && isPhoneNumberValid(newData)) {
+      const { FirstName, LastName } = await checkPhoneNumber(newData.PhoneNumber);
+      if (FirstName && LastName) {
+        newData.FirstName = FirstName;
+        newData.LastName = LastName;
+      }
+    }
     setData(newData);
     setValid(isPhoneNumberValid(newData) && isTemperatureValid(newData) && isFirstNameValid(newData) && isLastNameValid(newData));
+  }
+
+  async function checkPhoneNumber(phoneNumber) {
+    if (!isCheckingPhoneNumber) {
+      setCheckingPhoneNumber(true);
+      try {
+        const response = await Api.visits.search(phoneNumber);
+        const { FirstName, LastName } = response.data;
+        return { FirstName, LastName };
+      } catch {
+        // no-op
+      } finally {
+        setCheckingPhoneNumber(false);
+      }
+    }
+    return {};
   }
 
   function isPhoneNumberValid(data) {
@@ -92,7 +117,7 @@ function SignIn() {
   }
 
   return (
-    <main className="container">
+    <main className="sign-in container">
       <div className="row justify-content-center">
         <div className="col col-sm-10 col-md-8 col-lg-6 col-xl-4">
           <div className="card">
@@ -104,6 +129,11 @@ function SignIn() {
                     <div className="mb-3">
                       <label className="form-label" htmlFor="PhoneNumber">
                         Phone Number
+                        {isCheckingPhoneNumber && (
+                          <div className="sign-in__spinner spinner-border spinner-border-sm text-secondary" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                          </div>
+                        )}
                       </label>
                       <Cleave
                         options={{ delimiter: '-', phone: true, phoneRegionCode: 'US' }}

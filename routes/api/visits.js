@@ -58,6 +58,27 @@ router.get('/', requireToken, async (req, res) => {
   res.json(records.map((r) => r.toJSON()));
 });
 
+router.get('/search', requireToken, async (req, res) => {
+  const { phoneNumber: PhoneNumber } = req.query;
+  if (PhoneNumber?.match(/^\d{10}$/)) {
+    // find the most recent visit by this PhoneNumber
+    const options = {
+      where: { PhoneNumber },
+      order: [['createdAt', 'DESC']],
+      limit: 1,
+    };
+    const visit = await models.Visit.findOne(options);
+    if (visit) {
+      const { FirstName, LastName } = visit;
+      res.json({ FirstName, LastName });
+    } else {
+      res.status(HttpStatus.NOT_FOUND).end();
+    }
+  } else {
+    res.status(HttpStatus.UNPROCESSABLE_ENTITY).end();
+  }
+});
+
 router.get('/:id', requireToken, async (req, res) => {
   const record = await models.Visit.findByPk(req.params.id);
   if (record) {
