@@ -36,7 +36,15 @@ function Sheet() {
 
   useEffect(() => {
     if (id && selectedProgramId) {
-      Api.visits.index({ locationId: id, programId: selectedProgramId }).then((response) => setVisits(response.data));
+      const now = DateTime.now();
+      Api.visits
+        .index({
+          locationId: id,
+          programId: selectedProgramId,
+          from: now.toISODate(),
+          timeZone: now.zoneName,
+        })
+        .then((response) => setVisits(response.data));
     }
   }, [id, selectedProgramId]);
 

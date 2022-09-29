@@ -16,7 +16,23 @@ instance.interceptors.response.use(
   }
 );
 
+function parseLinkHeader(response) {
+  const link = response.headers?.link;
+  if (link) {
+    const linkRe = /<([^>]+)>; rel="([^"]+)"/g;
+    const urls = {};
+    let m;
+    while ((m = linkRe.exec(link)) !== null) {
+      let url = m[1];
+      urls[m[2]] = url;
+    }
+    return urls;
+  }
+  return null;
+}
+
 const Api = {
+  parseLinkHeader,
   assets: {
     create(data) {
       return instance.post('/api/assets', data);
@@ -36,11 +52,10 @@ const Api = {
       return instance.post('/api/auth/register', data);
     },
   },
-
   visits: {
     index(params) {
-      const { programId, locationId } = params ?? {};
-      return instance.get('/api/visits', { params: { programId, locationId } });
+      const { from, to, programId, locationId, page, timeZone } = params ?? {};
+      return instance.get('/api/visits', { params: { from, to, programId, locationId, page, timeZone } });
     },
     search(phoneNumber) {
       return instance.get('/api/visits/search', { params: { phoneNumber } });

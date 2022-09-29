@@ -2,6 +2,11 @@ const crypto = require('crypto');
 const express = require('express');
 const HttpStatus = require('http-status-codes');
 const _ = require('lodash');
+const Sequelize = require('sequelize');
+const QueryStream = require('pg-query-stream');
+const { transform } = require('stream-transform');
+const { DateTime } = require('luxon');
+const { stringify } = require('csv-stringify');
 
 const models = require('../../models');
 const interceptors = require('../interceptors');
@@ -34,9 +39,22 @@ router.get('/', requireToken, async (req, res) => {
   const options = {
     where: {},
     page,
-    order: [['TimeIn', 'ASC']],
   };
-  const { locationId, programId } = req.query;
+  const { from, to, locationId, programId, timeZone, format } = req.query;
+  if (from || to) {
+    let arg;
+    if (timeZone) {
+      arg = Sequelize.literal(`"TimeIn" AT TIME ZONE ${models.sequelize.escape(timeZone)}`);
+    } else {
+      arg = Sequelize.col('TimeIn');
+    }
+    if (from) {
+      options.where.from = Sequelize.where(Sequelize.fn('DATE', arg), '>=', from);
+    }
+    if (to) {
+      options.where.to = Sequelize.where(Sequelize.fn('DATE', arg), '<=', to);
+    }
+  }
   if (locationId) {
     options.where.LocationId = locationId;
     if (req.token) {
@@ -52,10 +70,48 @@ router.get('/', requireToken, async (req, res) => {
   }
   if (!req.user) {
     options.where.TimeOut = null;
+    options.order = [['TimeIn', 'ASC']];
+  } else {
+    options.include = [models.Location, models.Program];
+    options.order = [['TimeIn', 'DESC']];
   }
-  const { records, pages, total } = await models.Visit.paginate(options);
-  helpers.setPaginationHeaders(req, res, page, pages, total);
-  res.json(records.map((r) => r.toJSON()));
+  if (format === 'csv') {
+    // eslint-disable-next-line no-underscore-dangle
+    models.Visit._conformIncludes(options);
+    // eslint-disable-next-line no-underscore-dangle
+    models.Visit._expandIncludeAll(options);
+    // eslint-disable-next-line no-underscore-dangle
+    models.Visit._validateIncludedElements(options);
+    const query = models.sequelize.dialect.queryGenerator.selectQuery(models.Visit.tableName, options, models.Visit);
+    const queryStream = new QueryStream(query);
+    const connection = await models.sequelize.connectionManager.getConnection();
+    const stream = connection.query(queryStream);
+    stream.on('end', () => models.sequelize.connectionManager.releaseConnection(connection));
+    stream.on('finish', () => models.sequelize.connectionManager.releaseConnection(connection));
+    const transformer = transform((data) => {
+      let timeIn = DateTime.fromJSDate(data.TimeIn);
+      if (timeZone) {
+        timeIn = timeIn.setZone(timeZone);
+      }
+      return {
+        Date: timeIn.toISODate(),
+        Location: data['Location.Name'],
+        Program: data['Program.Name'],
+        Name: `${data.FirstName} ${data.LastName}`,
+        PhoneNumber: `${data.PhoneNumber.substring(0, 3)}-${data.PhoneNumber.substring(3, 6)}-${data.PhoneNumber.substring(6)}`,
+        Temperature: data.Temperature,
+        TimeIn: timeIn.toLocaleString(DateTime.TIME_SIMPLE),
+        TimeOut: data.TimeOut ? DateTime.fromJSDate(data.TimeOut).toLocaleString(DateTime.TIME_SIMPLE) : '',
+      };
+    });
+    const csv = stringify({ header: true });
+    res.attachment('report.csv');
+    stream.pipe(transformer).pipe(csv).pipe(res);
+  } else {
+    const { records, pages, total } = await models.Visit.paginate(options);
+    helpers.setPaginationHeaders(req, res, page, pages, total);
+    res.json(records.map((r) => r.toJSON()));
+  }
 });
 
 router.get('/search', requireToken, async (req, res) => {
