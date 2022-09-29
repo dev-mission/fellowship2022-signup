@@ -146,7 +146,7 @@ function Reports() {
                 <td>{formatPhoneNumber(v.PhoneNumber)}</td>
                 <td>{v.Temperature}</td>
                 <td>{DateTime.fromISO(v.TimeIn).toLocaleString(DateTime.TIME_SIMPLE)}</td>
-                <td>{DateTime.fromISO(v.TimeOut).toLocaleString(DateTime.TIME_SIMPLE)}</td>
+                <td>{v.TimeOut && DateTime.fromISO(v.TimeOut).toLocaleString(DateTime.TIME_SIMPLE)}</td>
               </tr>
             ))}
           </tbody>
