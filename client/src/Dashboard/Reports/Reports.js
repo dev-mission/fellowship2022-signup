@@ -69,6 +69,11 @@ function Reports() {
     setSearchParams(filters);
   }
 
+  function onCSV() {
+    const params = new URLSearchParams({ ...filters, format: 'csv' });
+    window.open(`/api/visits?${params.toString()}`);
+  }
+
   return (
     <main className="container">
       <h1 className="mb-3">Reports</h1>
@@ -114,7 +119,7 @@ function Reports() {
         <div className="col-lg-1">
           <label className="d-none d-lg-inline">&nbsp;</label>
           <div className="d-grid">
-            <button type="button" className="btn btn-secondary">
+            <button onClick={onCSV} type="button" className="btn btn-secondary">
               CSV
             </button>
           </div>

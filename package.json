@@ -16,6 +16,7 @@
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.6",
     "cookie-session": "^1.4.0",
+    "csv-stringify": "^6.2.0",
     "debug": "~4.3.1",
     "dotenv": "^10.0.0",
     "ejs": "^3.1.6",
@@ -38,8 +39,10 @@
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "pg": "^8.6.0",
+    "pg-query-stream": "^4.2.4",
     "sequelize": "^6.20.1",
     "sequelize-cli": "^6.4.1",
+    "stream-transform": "^3.2.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
