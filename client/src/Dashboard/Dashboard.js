@@ -41,7 +41,7 @@ function Dashboard() {
                 <h5 className="card-title">Reports</h5>
                 <p className="card-text">Run attendance reports on visits to your Locations and/or Programs.</p>
                 <div className="d-grid gap-2">
-                  <Link to="#" className="btn btn-primary">
+                  <Link to="/dashboard/reports" className="btn btn-primary">
                     Run Reports
                   </Link>
                 </div>

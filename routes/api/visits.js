@@ -34,7 +34,6 @@ router.get('/', requireToken, async (req, res) => {
   const options = {
     where: {},
     page,
-    order: [['TimeIn', 'ASC']],
   };
   const { locationId, programId } = req.query;
   if (locationId) {
@@ -52,6 +51,10 @@ router.get('/', requireToken, async (req, res) => {
   }
   if (!req.user) {
     options.where.TimeOut = null;
+    options.order = [['TimeIn', 'ASC']];
+  } else {
+    options.include = [models.Location, models.Program];
+    options.order = [['TimeIn', 'DESC']];
   }
   const { records, pages, total } = await models.Visit.paginate(options);
   helpers.setPaginationHeaders(req, res, page, pages, total);

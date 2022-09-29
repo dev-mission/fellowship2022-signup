@@ -39,8 +39,8 @@ const Api = {
 
   visits: {
     index(params) {
-      const { programId, locationId } = params ?? {};
-      return instance.get('/api/visits', { params: { programId, locationId } });
+      const { from, to, programId, locationId } = params ?? {};
+      return instance.get('/api/visits', { params: { from, to, programId, locationId } });
     },
     search(phoneNumber) {
       return instance.get('/api/visits/search', { params: { phoneNumber } });
