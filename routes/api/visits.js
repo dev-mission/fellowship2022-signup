@@ -36,12 +36,20 @@ router.get('/', requireToken, async (req, res) => {
     where: {},
     page,
   };
-  const { from, to, locationId, programId } = req.query;
-  if (from) {
-    options.where.from = Sequelize.where(Sequelize.fn('DATE', Sequelize.col('TimeIn')), '>=', from);
-  }
-  if (to) {
-    options.where.to = Sequelize.where(Sequelize.fn('DATE', Sequelize.col('TimeIn')), '<=', to);
+  const { from, to, locationId, programId, timeZone } = req.query;
+  if (from || to) {
+    let arg;
+    if (timeZone) {
+      arg = Sequelize.literal(`"TimeIn" AT TIME ZONE ${models.sequelize.escape(timeZone)}`);
+    } else {
+      arg = Sequelize.col('TimeIn');
+    }
+    if (from) {
+      options.where.from = Sequelize.where(Sequelize.fn('DATE', arg), '>=', from);
+    }
+    if (to) {
+      options.where.to = Sequelize.where(Sequelize.fn('DATE', arg), '<=', to);
+    }
   }
   if (locationId) {
     options.where.LocationId = locationId;

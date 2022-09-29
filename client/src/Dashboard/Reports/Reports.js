@@ -33,6 +33,7 @@ function Reports() {
         locationId: searchParams.get('locationId'),
         programId: searchParams.get('programId'),
         page,
+        timeZone: DateTime.now().zoneName,
       })
       .then((response) => {
         setVisits(response.data);
