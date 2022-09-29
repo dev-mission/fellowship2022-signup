@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const express = require('express');
 const HttpStatus = require('http-status-codes');
 const _ = require('lodash');
+const Sequelize = require('sequelize');
 
 const models = require('../../models');
 const interceptors = require('../interceptors');
@@ -35,7 +36,13 @@ router.get('/', requireToken, async (req, res) => {
     where: {},
     page,
   };
-  const { locationId, programId } = req.query;
+  const { from, to, locationId, programId } = req.query;
+  if (from) {
+    options.where.from = Sequelize.where(Sequelize.fn('DATE', Sequelize.col('TimeIn')), '>=', from);
+  }
+  if (to) {
+    options.where.to = Sequelize.where(Sequelize.fn('DATE', Sequelize.col('TimeIn')), '<=', to);
+  }
   if (locationId) {
     options.where.LocationId = locationId;
     if (req.token) {
