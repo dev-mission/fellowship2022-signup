@@ -1,30 +1,58 @@
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { DateTime } from 'luxon';
 
 import Api from '../../Api';
+import Pagination from '../../Components/Pagination';
 
 function Reports() {
-  const [filters, setFilters] = useState({
+  const [searchParams, setSearchParams] = useSearchParams({
     from: '',
     to: '',
     locationId: '',
     programId: '',
+    page: '1',
+  });
+  const page = parseInt(searchParams.get('page'), 10);
+  const [lastPage, setLastPage] = useState(1);
+  const [filters, setFilters] = useState({
+    from: searchParams.get('from'),
+    to: searchParams.get('to'),
+    locationId: searchParams.get('locationId'),
+    programId: searchParams.get('programId'),
   });
   const [locations, setLocations] = useState([]);
   const [programs, setPrograms] = useState([]);
   const [visits, setVisits] = useState([]);
 
   useEffect(() => {
-    Api.visits.index().then((response) => {
-      setVisits(response.data);
-    });
+    Api.visits
+      .index({
+        from: searchParams.get('from'),
+        to: searchParams.get('to'),
+        locationId: searchParams.get('locationId'),
+        programId: searchParams.get('programId'),
+        page,
+      })
+      .then((response) => {
+        setVisits(response.data);
+        const linkHeader = Api.parseLinkHeader(response);
+        let newLastPage = page;
+        if (linkHeader?.last) {
+          const match = linkHeader.last.match(/page=(\d+)/);
+          newLastPage = parseInt(match[1], 10);
+        } else if (linkHeader?.next) {
+          newLastPage = page + 1;
+        }
+        setLastPage(newLastPage);
+      });
     Api.locations.index().then((response) => {
       setLocations(response.data);
     });
     Api.programs.index().then((response) => {
       setPrograms(response.data);
     });
-  }, []);
+  }, [searchParams, page]);
 
   function onChange(event) {
     const newFilters = { ...filters };
@@ -37,8 +65,7 @@ function Reports() {
   }
 
   async function onRun() {
-    const response = await Api.visits.index(filters);
-    setVisits(response.data);
+    setSearchParams(filters);
   }
 
   return (
@@ -124,6 +151,7 @@ function Reports() {
           </tbody>
         </table>
       </div>
+      <Pagination page={page} lastPage={lastPage} />
     </main>
   );
 }
