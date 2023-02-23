@@ -10,7 +10,7 @@ import { useAuthContext } from './AuthContext';
 function Header() {
   const navigate = useNavigate();
   const { user, setUser } = useAuthContext();
-  const [isOpen, setOpen] = useState(false);
+  const [isNavbarShowing, setNavbarShowing] = useState(false);
 
   useEffect(
     function () {
@@ -29,7 +29,16 @@ function Header() {
     event.preventDefault();
     await Api.auth.logout();
     setUser(null);
+    hideNavbar();
     navigate('/');
+  }
+
+  function toggleNavbar() {
+    setNavbarShowing(!isNavbarShowing);
+  }
+
+  function hideNavbar() {
+    setNavbarShowing(false);
   }
 
   return (
@@ -39,35 +48,35 @@ function Header() {
           <img src={brand} alt="" width="30" height="30" className="me-1" />
           SignMe
         </Link>
-        <button onClick={() => setOpen(!isOpen)} className="navbar-toggler" type="button" aria-label="Toggle navigation">
+        <button onClick={toggleNavbar} className="navbar-toggler" type="button" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div className={classNames('collapse navbar-collapse', { show: isOpen })}>
+        <div className={classNames('collapse navbar-collapse', { show: isNavbarShowing })}>
           <ul className="navbar-nav flex-grow-1 mb-2 mb-md-0">
             <li className="nav-item active">
-              <Link onClick={() => setOpen(false)} className="nav-link" aria-current="page" to="/">
+              <Link onClick={hideNavbar} className="nav-link" aria-current="page" to="/">
                 Home
               </Link>
             </li>
             {user && (
               <>
                 <li className="nav-item active">
-                  <Link onClick={() => setOpen(false)} className="nav-link" aria-current="page" to="/dashboard">
+                  <Link onClick={hideNavbar} className="nav-link" aria-current="page" to="/dashboard">
                     Dashboard
                   </Link>
                 </li>
                 <li className="nav-item active">
-                  <Link onClick={() => setOpen(false)} className="nav-link" aria-current="page" to="/dashboard/locations">
+                  <Link onClick={hideNavbar} className="nav-link" aria-current="page" to="/dashboard/locations">
                     Locations
                   </Link>
                 </li>
                 <li className="nav-item active">
-                  <Link onClick={() => setOpen(false)} className="nav-link" aria-current="page" to="/dashboard/programs">
+                  <Link onClick={hideNavbar} className="nav-link" aria-current="page" to="/dashboard/programs">
                     Programs
                   </Link>
                 </li>
                 <li className="nav-item active">
-                  <Link onClick={() => setOpen(false)} className="nav-link" aria-current="page" to="/dashboard/reports">
+                  <Link onClick={hideNavbar} className="nav-link" aria-current="page" to="/dashboard/reports">
                     Reports
                   </Link>
                 </li>
@@ -76,10 +85,17 @@ function Header() {
             <div className="flex-grow-1 d-flex justify-content-end">
               {user && (
                 <>
+                  {user.isAdmin && (
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/admin" onClick={hideNavbar}>
+                        Admin
+                      </Link>
+                    </li>
+                  )}
                   <li className="nav-item me-3">
-                    <span className="nav-link d-inline-block">
+                    <span className="nav-link d-inline-block me-1">
                       Hello,{' '}
-                      <Link onClick={() => setOpen(false)} to="/account">
+                      <Link to="/account" onClick={hideNavbar}>
                         {user.firstName}!
                       </Link>
                     </span>
@@ -94,7 +110,7 @@ function Header() {
               )}
               {!user && (
                 <li className="nav-item">
-                  <Link onClick={() => setOpen(false)} className="nav-link" to="/login">
+                  <Link className="nav-link" to="/login" onClick={hideNavbar}>
                     Log in
                   </Link>
                 </li>
