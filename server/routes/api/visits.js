@@ -35,7 +35,7 @@ async function requireToken(req, res, next) {
 
 // http methods
 router.get('/', requireToken, async (req, res) => {
-  const page = req.query.page || 1;
+  const page = req.query.page || '1';
   const options = {
     where: {},
     page,
