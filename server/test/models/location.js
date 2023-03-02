@@ -20,6 +20,7 @@ describe('models.Location', () => {
     assert.deepStrictEqual(Location.Name, 'Ben');
     assert.deepStrictEqual(Location.Address, '360 Valencia');
   });
+
   it('fetches all the time', async () => {
     const results = await models.Location.findAll();
     assert.deepStrictEqual(results.length, 2);
