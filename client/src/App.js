@@ -6,10 +6,12 @@ import Header from './Header';
 import Home from './Home';
 import Login from './Login';
 import DashboardRoutes from './Dashboard/DashboardRoutes';
-import PasswordRoutes from './Passwords/PasswordRoutes';
-import Register from './Register';
 import SheetRoutes from './Sheet/SheetRoutes';
-import UserRoutes from './Users/UserRoutes';
+import AdminRoutes from './Admin/AdminRoutes';
+import InvitesRoutes from './Invites/InvitesRoutes';
+import PasswordsRoutes from './Passwords/PasswordsRoutes';
+import Register from './Register';
+import UsersRoutes from './Users/UsersRoutes';
 
 import './App.scss';
 
@@ -28,21 +30,30 @@ function App() {
                   <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Login />} />
-                    <Route path="/passwords/*" element={<PasswordRoutes />} />
+                    <Route path="/passwords/*" element={<PasswordsRoutes />} />
+                    <Route path="/invites/*" element={<InvitesRoutes />} />
                     {process.env.REACT_APP_FEATURE_REGISTRATION === 'true' && <Route path="/register" element={<Register />} />}
                     <Route
                       path="/account/*"
                       element={
                         <AuthProtected>
-                          <UserRoutes />
+                          <UsersRoutes />
                         </AuthProtected>
                       }
                     />
                     <Route
                       path="/dashboard/*"
                       element={
-                        <AuthProtected isAdminRequired={true}>
+                        <AuthProtected>
                           <DashboardRoutes />
+                        </AuthProtected>
+                      }
+                    />
+                    <Route
+                      path="/admin/*"
+                      element={
+                        <AuthProtected isAdminRequired={true}>
+                          <AdminRoutes />
                         </AuthProtected>
                       }
                     />

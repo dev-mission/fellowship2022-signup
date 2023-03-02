@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import Api from '../../Api';
+import { useAuthContext } from '../../AuthContext';
 
 function Programs() {
+  const { user } = useAuthContext();
   const [programs, setPrograms] = useState([]);
 
   useEffect(function () {
@@ -15,11 +17,13 @@ function Programs() {
   return (
     <main className="container">
       <h1>Programs</h1>
-      <div className="mb-3">
-        <Link to="/dashboard/programs/new" className="btn btn-primary">
-          Add New Program
-        </Link>
-      </div>
+      {user?.isAdmin && (
+        <div className="mb-3">
+          <Link to="/dashboard/programs/new" className="btn btn-primary">
+            Add New Program
+          </Link>
+        </div>
+      )}
       <div className="table-responsive">
         <table className="table table-striped">
           <thead>
@@ -30,12 +34,14 @@ function Programs() {
           </thead>
           <tbody>
             {programs.map((program) => (
-              <tr>
-                <td className="text-nowrap">{program.Name}</td>{' '}
+              <tr key={program.id}>
+                <td className="text-nowrap">{program.Name}</td>
                 <td className="text-nowrap">
-                  <Link to={`/dashboard/programs/${program.id}/edit`} className="btn btn-primary">
-                    Edit
-                  </Link>
+                  {user?.isAdmin && (
+                    <Link to={`/dashboard/programs/${program.id}/edit`} className="btn btn-primary">
+                      Edit
+                    </Link>
+                  )}
                 </td>
               </tr>
             ))}

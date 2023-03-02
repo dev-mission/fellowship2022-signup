@@ -6,7 +6,7 @@ import { useAuthContext } from '../../AuthContext';
 
 function Locations() {
   const [locations, setLocations] = useState([]);
-  const { setUser } = useAuthContext();
+  const { user, setUser } = useAuthContext();
   const navigate = useNavigate();
 
   useEffect(function () {
@@ -25,11 +25,13 @@ function Locations() {
   return (
     <main className="container">
       <h1>Locations</h1>
-      <div className="mb-3">
-        <Link to="/dashboard/locations/new" className="btn btn-primary">
-          Add New Location
-        </Link>
-      </div>
+      {user?.isAdmin && (
+        <div className="mb-3">
+          <Link to="/dashboard/locations/new" className="btn btn-primary">
+            Add New Location
+          </Link>
+        </div>
+      )}
       <div className="table-responsive">
         <table className="table table-striped">
           <thead>
@@ -48,9 +50,11 @@ function Locations() {
                   <a onClick={(event) => onSetupTablet(event, location.id)} href={`/sheet/${location.id}`} className="btn btn-primary me-3">
                     Set Up Tablet
                   </a>
-                  <Link to={`/dashboard/locations/${location.id}/edit`} className="btn btn-outline-primary">
-                    Edit
-                  </Link>
+                  {user?.isAdmin && (
+                    <Link to={`/dashboard/locations/${location.id}/edit`} className="btn btn-outline-primary">
+                      Edit
+                    </Link>
+                  )}
                 </td>
               </tr>
             ))}

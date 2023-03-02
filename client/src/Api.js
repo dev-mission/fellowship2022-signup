@@ -113,6 +113,26 @@ const Api = {
       return instance.delete(`/api/programs/${id}`);
     },
   },
+  invites: {
+    index() {
+      return instance.get(`/api/invites`);
+    },
+    create(data) {
+      return instance.post('/api/invites', data);
+    },
+    get(id) {
+      return instance.get(`/api/invites/${id}`);
+    },
+    accept(id, data) {
+      return instance.post(`/api/invites/${id}/accept`, data);
+    },
+    resend(id) {
+      return instance.post(`/api/invites/${id}/resend`);
+    },
+    revoke(id) {
+      return instance.delete(`/api/invites/${id}`);
+    },
+  },
   passwords: {
     reset(email) {
       return instance.post('/api/passwords', { email });
@@ -125,8 +145,14 @@ const Api = {
     },
   },
   users: {
+    index() {
+      return instance.get(`/api/users`);
+    },
     me() {
       return instance.get('/api/users/me');
+    },
+    get(id) {
+      return instance.get(`/api/users/${id}`);
     },
     update(id, data) {
       return instance.patch(`/api/users/${id}`, data);

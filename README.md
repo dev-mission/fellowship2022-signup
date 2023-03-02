@@ -8,13 +8,13 @@ Fatimah Inayah Abdolcader
 
 This repository contains a "starter" project for web application development in JavaScript. This includes the following components, from front-end to back-end:
 
-- React 18.1.0
-- React Router 6.3.3
-- Bootstrap 5.1.3
-- Node.js 16.15.0
-- Express 4.18.1
-- Sequelize 6.20.1
-- Postgres 13
+- React 18.2.0
+- React Router 6.8.0
+- Bootstrap 5.2.3
+- Node.js 18.13.0
+- Express 4.18.2
+- Sequelize 6.28.0
+- Postgres 14
 
 ## One-time Setup
 
@@ -102,7 +102,9 @@ This repository contains a "starter" project for web application development in 
 
 ## Heroku Deployment Setup
 
-1. Create a free Heroku account at: https://signup.heroku.com/
+1. Sign up for a Heroku account at: https://signup.heroku.com/
+
+   You will need to add a credit card to your account and enable a billing subscription for Eco dynos.
 
 2. Click on the Deploy button below:
 
@@ -141,8 +143,28 @@ This repository contains a "starter" project for web application development in 
 5. Once linked, you can execute Heroku CLI commands. For example, to run the user creation script on the server:
 
    ```
-   heroku run bin/create-admin Firstname Lastname email password
+   heroku run "cd server && bin/create-admin Firstname Lastname email password"
    ```
+
+## Render Deployment Setup
+
+1. Sign up for a Render account at: https://render.com/
+
+   You will need to add a credit card number to your account, even if using free instances.
+
+2. In the Dashboard, go to Blueprints, and click on New Blueprint Instance.
+
+3. Connect your Github account and return to this page. Select your forked repository.
+
+4. Enter a name for your deployment, and optionally the branch you wish to deploy (if not main).
+
+5. Set values for REACT_APP_FEATURE_REGISTRATION (true/false to enable/disable user registration), REACT_APP_SITE_TITLE (the name you wish to appear in the browser title bar), and SMTP_ENABLED (true/false to enable/disable mail, recommend false to start until mail server is set up).
+
+6. Click on Apply and wait, this can take quite a few minutes. You can click on the web service server link to follow the deployment event and watch the logs if you like.
+
+7. Once completed, you can see the site at the provided generated URL.
+
+8. Go to the web service server Settings, and edit the Build Command. Remove the command to create a first admin user (`bin/create-admin Site Admin admin@test.com changeme123;`). You can log in to the site with this email and temporary password (change it immediately after logging in!).
 
 ## Shell Command Quick Reference
 
