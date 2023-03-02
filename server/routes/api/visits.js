@@ -15,7 +15,7 @@ const helpers = require('../helpers');
 const router = express.Router();
 
 async function requireToken(req, res, next) {
-  if (req.user?.isAdmin) {
+  if (req.user) {
     next();
   } else {
     req.token = req.signedCookies['sheet-token'];

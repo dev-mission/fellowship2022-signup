@@ -10,7 +10,7 @@ const helpers = require('../helpers');
 const router = express.Router();
 
 // http methods
-router.get('/', interceptors.requireAdmin, async (req, res) => {
+router.get('/', interceptors.requireLogin, async (req, res) => {
   const page = req.query.page || 1;
   const { records, pages, total } = await models.Location.paginate({
     page,
@@ -25,7 +25,7 @@ router.get('/', interceptors.requireAdmin, async (req, res) => {
   res.json(records.map((r) => r.toJSON()));
 });
 
-router.get('/:id/setup', interceptors.requireAdmin, async (req, res) => {
+router.get('/:id/setup', interceptors.requireLogin, async (req, res) => {
   const record = await models.Location.findByPk(req.params.id);
   if (record) {
     req.logout(() => {

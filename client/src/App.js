@@ -44,7 +44,7 @@ function App() {
                     <Route
                       path="/dashboard/*"
                       element={
-                        <AuthProtected isAdminRequired={true}>
+                        <AuthProtected>
                           <DashboardRoutes />
                         </AuthProtected>
                       }
