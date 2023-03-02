@@ -100,8 +100,8 @@ router.get('/', requireToken, async (req, res) => {
         Name: `${data.FirstName} ${data.LastName}`,
         PhoneNumber: `${data.PhoneNumber.substring(0, 3)}-${data.PhoneNumber.substring(3, 6)}-${data.PhoneNumber.substring(6)}`,
         Temperature: data.Temperature,
-        TimeIn: timeIn.toLocaleString(DateTime.TIME_SIMPLE),
-        TimeOut: data.TimeOut ? DateTime.fromJSDate(data.TimeOut).toLocaleString(DateTime.TIME_SIMPLE) : '',
+        TimeIn: timeIn.toLocaleString(DateTime.TIME_SIMPLE).replace('\u202F', ' '),
+        TimeOut: data.TimeOut ? DateTime.fromJSDate(data.TimeOut).toLocaleString(DateTime.TIME_SIMPLE).replace('\u202F', ' ') : '',
       };
     });
     const csv = stringify({ header: true });
