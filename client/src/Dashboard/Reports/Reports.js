@@ -13,7 +13,7 @@ function Reports() {
     programId: '',
     page: '1',
   });
-  const page = parseInt(searchParams.get('page'), 10);
+  const page = parseInt(searchParams.get('page') ?? '1', 10);
   const [lastPage, setLastPage] = useState(1);
   const [filters, setFilters] = useState({
     from: searchParams.get('from'),
