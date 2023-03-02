@@ -157,7 +157,7 @@ function Reports() {
           </tbody>
         </table>
       </div>
-      <Pagination page={page} lastPage={lastPage} />
+      <Pagination page={page} lastPage={lastPage} otherParams={filters} />
     </main>
   );
 }
