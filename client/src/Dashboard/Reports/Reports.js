@@ -70,7 +70,7 @@ function Reports() {
   }
 
   function onCSV() {
-    const params = new URLSearchParams({ ...filters, format: 'csv' });
+    const params = new URLSearchParams({ ...filters, format: 'csv', timeZone: DateTime.now().zoneName });
     window.open(`/api/visits?${params.toString()}`);
   }
 
